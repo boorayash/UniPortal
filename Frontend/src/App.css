@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* ===============================
+   Fade-in animation (items, dots)
+   =============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.7s ease forwards;
+}
+
+/* ===============================
+   Slide-down animation (panels)
+   =============================== */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.25s ease-out forwards;
+}
+
+/* ===============================
+   Timeline line draw animation
+   =============================== */
+@keyframes drawLine {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-timeline-line {
+  transform-origin: top;
+  animation: drawLine 0.35s ease-out forwards;
+}
+
+/* ===============================
+   Animation delays (staggering)
+   =============================== */
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* ===============================
+   Legacy Login Effects (Keep these if used elsewhere)
+   =============================== */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* ===============================
+   NEW: Zero-Gravity / Sci-Fi Theme
+   =============================== */
+
+/* Slow pulse for the background Hexagon/Glows */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom Text Selection Color (Cyan glow) */
+::selection {
+  background-color: rgba(6, 182, 212, 0.3); /* Cyan-500 */
+  color: #ffffff;
+}
+
+/* Optional: Smoother gradient text rendering */
+.text-gradient {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
