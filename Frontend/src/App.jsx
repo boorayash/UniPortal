@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 import Login from './authorization/login'
+import Signup from './authorization/signup'
+import ForgotPassword from './authorization/forgotPassword'
+import ResetPassword from './authorization/resetPassword'
 import AdminDashboard from './admin/adminDashboard'
 import Departments from "./admin/departmentPage";
 import Users from "./admin/userPage";
@@ -12,7 +15,10 @@ import EditResubmitPopup from "./students/editResubmitPopup";
 import ProfessorDashboard from './professors/professorDashboard';
 import ProfessorAssignments from './professors/professorAssignment';
 import ReviewAssignment from './professors/professorReviewAssignment';
+import ApprovalPage from './admin/approvalPage';
 
+
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
@@ -21,20 +27,36 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/departments" element={<Departments />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/users/add" element={<AddUserPopup />} />
-        <Route path="/student/dashboard" element={<StudentDashboard />} />
-        <Route path="/student/assignments" element={<StudentAssignments />} />
-        <Route path="/student/assignments/upload" element={<UploadAssignment />} />
-        <Route path="/student/assignments/:id/edit" element={<EditResubmitPopup />} />
-        <Route path="/professor/dashboard" element={<ProfessorDashboard />} />
-        <Route path="/professor/assignments" element={<ProfessorAssignments />} />
-        <Route path="/professor/assignments/:id/review" element={<ReviewAssignment />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+        {/* Admin Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/departments" element={<Departments />} />
+          <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/users/add" element={<AddUserPopup />} />
+          <Route path="/admin/approvals" element={<ApprovalPage />} />
+        </Route>
+
+        {/* Student Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['student']} />}>
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/assignments" element={<StudentAssignments />} />
+          <Route path="/student/assignments/upload" element={<UploadAssignment />} />
+          <Route path="/student/assignments/:id/edit" element={<EditResubmitPopup />} />
+        </Route>
+
+        {/* Professor Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['professor']} />}>
+          <Route path="/professor/dashboard" element={<ProfessorDashboard />} />
+          <Route path="/professor/assignments" element={<ProfessorAssignments />} />
+          <Route path="/professor/assignments/:id/review" element={<ReviewAssignment />} />
+        </Route>
       </Routes>
     </BrowserRouter>
-    
+
   );
 }
 

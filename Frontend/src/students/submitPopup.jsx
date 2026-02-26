@@ -12,7 +12,7 @@ export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess 
   const fetchProfessors = async () => {
     const token = localStorage.getItem("token");
     const res = await fetch("http://localhost:5000/student/professors", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
+      credentials: "include",
     });
     const data = await res.json();
     setProfessors(data || []);
@@ -24,16 +24,14 @@ export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess 
     setLoading(true);
 
     const token = localStorage.getItem("token");
-    const res = await fetch(
-      `http://localhost:5000/student/assignments/${assignmentId}/submit`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ reviewerId: reviewer })
-      }
+    const res = await fetch(`http://localhost:5000/student/assignments/${assignmentId}/submit`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ reviewerId: reviewer })
+    }
     );
 
     const data = await res.json();

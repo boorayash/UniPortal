@@ -15,6 +15,7 @@ export default function AdminReuse() {
           <NavItem to="/admin/dashboard" label="Dashboard" />
           <NavItem to="/admin/departments" label="Departments" />
           <NavItem to="/admin/users" label="Users" />
+          <NavItem to="/admin/approvals" label="Approvals" />
         </nav>
       </div>
 
@@ -39,10 +40,9 @@ function NavItem({ to, label }) {
           className={`
             relative overflow-hidden px-4 py-3 rounded-xl
             transition-all duration-300
-            ${
-              isActive
-                ? "bg-white/20 text-white scale-[1.02]"
-                : "text-gray-300 hover:bg-white/10 hover:text-white"
+            ${isActive
+              ? "bg-white/20 text-white scale-[1.02]"
+              : "text-gray-300 hover:bg-white/10 hover:text-white"
             }
           `}
         >

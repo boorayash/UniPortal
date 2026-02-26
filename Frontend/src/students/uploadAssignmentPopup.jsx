@@ -6,6 +6,7 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
   const [category, setCategory] = useState("assignment");
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +16,9 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
       return;
     }
 
+    setLoading(true);
+    setMessage(""); // Clear old messages
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -22,12 +26,11 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
     formData.append("file", file);
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
         "http://localhost:5000/student/assignments/upload",
         {
           method: "POST",
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          credentials: 'include',
           body: formData
         }
       );
@@ -37,12 +40,14 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
       if (res.ok) {
         setMessage("Assignment uploaded successfully");
         onSuccess?.();
-        onClose();
+        setTimeout(() => onClose(), 1500); // Close after showing success
       } else {
         setMessage(data.message || "Upload failed");
       }
     } catch (err) {
       setMessage("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,9 +101,13 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl"
+            disabled={loading}
+            className={`w-full py-3 rounded-xl transition ${loading
+                ? "bg-blue-600/50 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+              }`}
           >
-            Upload
+            {loading ? "Uploading..." : "Upload"}
           </button>
 
           {message && (

@@ -9,7 +9,7 @@ export default function AdminDashboard() {
     departments: 0,
     students: 0,
     professors: 0,
-    hods: 0,
+    pendingApprovals: 0,
   });
 
   const [activity, setActivity] = useState([]);
@@ -21,11 +21,7 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/admin/dashboard", {
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch("http://localhost:5000/admin/dashboard", { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -40,12 +36,15 @@ export default function AdminDashboard() {
   };
 
   const fetchActivity = async () => {
-    const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/admin/activity", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-    const data = await res.json();
-    setActivity(data || []);
+    try {
+      const res = await fetch("http://localhost:5000/admin/activity", {
+        credentials: 'include'
+      });
+      const data = await res.json();
+      setActivity(data || []);
+    } catch (err) {
+      console.log("Activity fetch error:", err);
+    }
   };
 
   return (
@@ -77,7 +76,7 @@ export default function AdminDashboard() {
           <AdminStatCard title="Total Departments" value={stats.departments} color="indigo" to="/admin/departments" />
           <AdminStatCard title="Total Students" value={stats.students} color="green" to="/admin/users?role=student" />
           <AdminStatCard title="Total Professors" value={stats.professors} color="orange" to="/admin/users?role=professor" />
-          <AdminStatCard title="Total HODs" value={stats.hods} color="purple" to="/admin/users?role=hod" />
+          <AdminStatCard title="Pending Approvals" value={stats.pendingApprovals} color="amber" to="/admin/approvals" />
         </div>
 
         {/* Activity */}

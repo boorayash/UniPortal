@@ -7,15 +7,11 @@ export default function EditResubmitPopup({ assignment, onClose, onSuccess }) {
   const handleUpdate = async () => {
     setLoading(true);
 
-    const token = localStorage.getItem("token");
     const res = await fetch(
       `http://localhost:5000/student/assignments/${assignment._id}/resubmit`,
       {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
+        credentials: 'include',
         body: JSON.stringify({ description })
       }
     );

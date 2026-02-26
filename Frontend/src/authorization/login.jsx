@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Lock, Loader2, ArrowRight, User, Key } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 // import * as THREE from 'three';
 
 // function createCircleTexture() {
@@ -201,6 +202,7 @@ function TiltCard({ children }) {
 
 // --- MAIN LOGIN COMPONENT ---
 export default function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -221,15 +223,19 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Login failed");
+      if (!response.ok) {
+        if (response.status === 403) throw new Error(data.message || "Account pending approval");
+        throw new Error(data.message || "Login failed");
+      }
 
-      if (data.token) localStorage.setItem('token', data.token);
-
-      const role = data.role;
-      if (role === "admin") window.location.href = "/admin/dashboard";
-      else if (role === "student") window.location.href = "/student/dashboard";
-      else if (role === "professor") window.location.href = "/professor/dashboard";
-      else if (role === "hod") window.location.href = "/hod/dashboard";
+      // Store role for UI routing, but not the token (it's in a cookie)
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('name', data.name);
+      
+      // Use navigate with replace
+      if (data.role === 'admin') navigate('/admin/dashboard', { replace: true });
+      else if (data.role === 'student') navigate('/student/dashboard', { replace: true });
+      else if (data.role === 'professor') navigate('/professor/dashboard', { replace: true });
       else setError("Invalid role. Contact administrator.");
 
     } catch (err) {
@@ -326,6 +332,20 @@ export default function Login() {
               )}
             </motion.button>
           </motion.form>
+
+          <div className="text-center mt-6 space-y-2">
+            <p className="text-slate-400 text-sm">
+              <Link to="/forgot-password" size="sm" className="hover:text-purple-300 transition-colors">
+                Forgot Password?
+              </Link>
+            </p>
+            <p className="text-slate-400 text-sm">
+              Don't have an account?{" "}
+              <Link to="/signup" className="underline font-semibold hover:text-purple-300 text-white">
+                Sign Up
+              </Link>
+            </p>
+          </div>
 
         </TiltCard>
       </div>

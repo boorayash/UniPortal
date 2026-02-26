@@ -20,8 +20,8 @@ const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN;
 
 // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cors({
-    origin: CLIENT_ORIGIN,
-    credentials: true
+  origin: CLIENT_ORIGIN,
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,15 +49,26 @@ app.get("/files/:filename", (req, res) => {
 });
 
 mongoose.connect(MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 
+const { loginLimiter } = require('./middleware/rateLimiter.js');
+app.use('/auth/login', loginLimiter);
 app.use('/auth', authRoutes);
-app.use('/admin',adminRoutes, departmentRoutes, userRoutes);
+app.use('/admin', adminRoutes, departmentRoutes, userRoutes);
 app.use('/student', studentRoutes);
 app.use('/professor', professorRoutes);
 
+const AppError = require('./utils/appError.js');
+const globalErrorHandler = require('./controllers/errorController.js');
+
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+app.use(globalErrorHandler);
+
 app.listen(PORT, () => {
-    console.log(`server connected on port ${PORT}`);
-    console.log("DIR:", __dirname);
+  console.log(`server connected on port ${PORT}`);
+  console.log("DIR:", __dirname);
 });

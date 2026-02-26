@@ -1,31 +1,61 @@
-import { useState } from 'react';
-import { User, Lock, Mail, Upload, ArrowRight, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { User, Lock, Mail, ArrowRight, ChevronDown } from 'lucide-react';
 
 export default function Signup() {
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [role, setRole] = useState('');
+  const [departmentId, setDepartmentId] = useState('');
+  const [departments, setDepartments] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfilePicture(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreviewUrl(reader.result);
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    fetch("http://localhost:5000/auth/departments")
+      .then(res => res.json())
+      .then(data => setDepartments(data || []))
+      .catch(() => setDepartments([]));
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name || !email || !password || !role || !departmentId) {
+      setMessage("All fields are required");
+      setIsSuccess(false);
+      return;
     }
-  };
 
-  const handleRemoveImage = () => {
-    setProfilePicture(null);
-    setPreviewUrl(null);
-  };
+    setIsLoading(true);
+    setMessage('');
 
-  const handleSubmit = () => {
-    console.log('Signup attempted:', { name, username, password, profilePicture });
+    try {
+      const res = await fetch("http://localhost:5000/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role, departmentId }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setIsSuccess(true);
+        setMessage(data.message);
+        setName(''); setEmail(''); setPassword(''); setRole(''); setDepartmentId('');
+      } else {
+        setIsSuccess(false);
+        setMessage(data.message || "Signup failed");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setIsSuccess(false);
+      setMessage("Something went wrong. Try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -39,7 +69,7 @@ export default function Signup() {
       </div>
 
       {/* Card */}
-      <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 w-full max-w-md transition-transform duration-500 hover:scale-105">
+      <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 w-full max-w-md transition-transform duration-500 hover:scale-[1.02]">
 
         {/* Header */}
         <div className="text-center mb-8">
@@ -48,87 +78,107 @@ export default function Signup() {
           </div>
 
           <h1 className="text-4xl font-bold text-white tracking-tight">Create Account</h1>
-          <p className="text-white/70 mt-1">Join us today and get started</p>
+          <p className="text-white/70 mt-1">Join UniPortal today</p>
         </div>
 
         {/* Form Fields */}
-        <div className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
 
           {/* Name */}
           <div className="relative">
-            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5" />
             <input
               type="text"
-              placeholder="Enter name"
+              placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400 focus:bg-white/20 transition backdrop-blur-sm"
             />
           </div>
 
-          {/* Username */}
+          {/* Email */}
           <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5" />
             <input
-              type="text"
-              placeholder="Enter email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400 focus:bg-white/20 transition backdrop-blur-sm"
             />
           </div>
 
           {/* Password */}
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5" />
             <input
               type="password"
-              placeholder="Enter password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400 focus:bg-white/20 transition backdrop-blur-sm"
             />
           </div>
 
-          {/* Picture Upload */}
-          <div>
-            <input type="file" accept="image/*" className="hidden" id="profile" onChange={handleFileChange} />
-
-            {!previewUrl ? (
-              <label htmlFor="profile" className="cursor-pointer flex justify-center items-center gap-2 py-3 border-2 border-dashed border-white/30 rounded-xl text-white hover:bg-white/10 transition">
-                <Upload className="w-5 h-5" /> Upload Profile Picture
-              </label>
-            ) : (
-              <div className="flex items-center gap-3 bg-white/10 border border-white/20 p-3 rounded-xl backdrop-blur-sm">
-                <img src={previewUrl} className="w-16 h-16 rounded-lg object-cover" alt="Preview" />
-                <div className="text-white flex-1">
-                  <p className="text-sm font-medium truncate">{profilePicture.name}</p>
-                  <p className="text-xs text-white/60">{(profilePicture.size / 1024).toFixed(1)} KB</p>
-                </div>
-                <button onClick={handleRemoveImage} className="p-2 rounded-lg hover:bg-white/20 transition">
-                  <X className="text-white w-4 h-4" />
-                </button>
-              </div>
-            )}
+          {/* Role Dropdown */}
+          <div className="relative">
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5 pointer-events-none" />
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-purple-400 focus:bg-white/20 transition backdrop-blur-sm appearance-none cursor-pointer"
+            >
+              <option value="" className="text-black">Select Role</option>
+              <option value="student" className="text-black">Student</option>
+              <option value="professor" className="text-black">Professor</option>
+            </select>
           </div>
+
+          {/* Department Dropdown */}
+          <div className="relative">
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5 pointer-events-none" />
+            <select
+              value={departmentId}
+              onChange={(e) => setDepartmentId(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-purple-400 focus:bg-white/20 transition backdrop-blur-sm appearance-none cursor-pointer"
+            >
+              <option value="" className="text-black">Select Department</option>
+              {departments.map((d) => (
+                <option key={d._id} value={d._id} className="text-black">
+                  {d.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Message */}
+          {message && (
+            <div className={`p-3 rounded-xl text-sm font-medium text-center ${isSuccess
+                ? 'bg-green-500/10 border border-green-500/20 text-green-300'
+                : 'bg-red-500/10 border border-red-500/20 text-red-300'
+              }`}>
+              {message}
+            </div>
+          )}
 
           {/* Submit Button */}
           <button
+            type="submit"
+            disabled={isLoading}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={handleSubmit}
-            className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl text-white font-semibold shadow-lg flex justify-center items-center gap-2 transition-all hover:scale-105"
+            className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl text-white font-semibold shadow-lg flex justify-center items-center gap-2 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>Sign Up</span>
-            <ArrowRight className={`transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
+            <span>{isLoading ? 'Creating Account...' : 'Sign Up'}</span>
+            {!isLoading && <ArrowRight className={`transition-transform ${isHovered ? 'translate-x-1' : ''}`} />}
           </button>
-        </div>
+        </form>
 
-        <p className="text-center text-white mt-6">
-          Already a user?{" "}
-          <a href="/login" className="underline font-semibold hover:text-purple-300">
+        <p className="text-center text-white/70 mt-6">
+          Already have an account?{" "}
+          <Link to="/" className="underline font-semibold hover:text-purple-300 text-white">
             Login
-          </a>
+          </Link>
         </p>
 
       </div>

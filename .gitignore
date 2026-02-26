@@ -8,6 +8,8 @@ node_modules/
 
 # IDEs and Editors
 .vscode/
+.planning/
+.agent/
 .idea/
 *.suo
 *.ntvs*

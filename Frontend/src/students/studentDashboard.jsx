@@ -21,11 +21,7 @@ export default function StudentDashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/student/dashboard", {
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch("http://localhost:5000/student/dashboard", { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -283,7 +279,7 @@ function StatusBadge({ status }) {
 //               recent.map((a) => (
 //                 <div
 //                   key={a._id}
-//                   className="flex justify-between items-center p-4 rounded-xl 
+//                   className="flex justify-between items-center p-4 rounded-xl
 //                             bg-black/30 hover:bg-black/40 transition border border-white/5"
 //                 >
 //                   {/* Left */}

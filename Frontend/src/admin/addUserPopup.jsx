@@ -12,8 +12,7 @@ export default function AddUserPopup({ close }) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    fetch("http://localhost:5000/admin/departments", { credentials: 'include', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+    fetch("http://localhost:5000/admin/departments", { credentials: 'include' })
       .then(res => { if (res.status === 401) { window.location.href = '/'; return null; } return res.json(); })
       .then(data => setDepartments(data || []));
   }, []);
@@ -25,41 +24,40 @@ export default function AddUserPopup({ close }) {
     }
 
     try {
-    const token = localStorage.getItem('token');
-    const res = await fetch("http://localhost:5000/admin/users/create", {
-      method: "POST",
-      headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
-      credentials: 'include',
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        departmentId,
-        role,
-      }),
-    });
+      const res = await fetch("http://localhost:5000/admin/users", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          departmentId,
+          role,
+        }),
+      });
 
-    if (res.status === 401) { window.location.href = '/'; return; }
-    const data = await res.json();
+      if (res.status === 401) { window.location.href = '/'; return; }
+      const data = await res.json();
 
-    if (res.ok) {
-      setMessage("User created successfully!");
+      if (res.ok) {
+        setMessage("User created successfully!");
 
-      // Clear all fields
-      setName("");
-      setEmail("");
-      setPassword("");
-      setDepartmentId("");
-      setRole("");
+        // Clear all fields
+        setName("");
+        setEmail("");
+        setPassword("");
+        setDepartmentId("");
+        setRole("");
 
-      // Keep popup open & show message
-    } else {
-      setMessage(data.message || "Something went wrong.");
+        // Keep popup open & show message
+      } else {
+        setMessage(data.message || "Something went wrong.");
+      }
+    } catch (err) {
+      console.log("Error creating user:", err);
+      setMessage("Server error");
     }
-  } catch (err) {
-    console.log("Error creating user:", err);
-    setMessage("Server error");
-  }
   };
 
   return (
@@ -102,7 +100,6 @@ export default function AddUserPopup({ close }) {
             <option value="">Select Role</option>
             <option value="student" className="text-black">Student</option>
             <option value="professor" className="text-black">Professor</option>
-            <option value="hod" className="text-black">HOD</option>
           </select>
 
         </div>

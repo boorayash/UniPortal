@@ -24,11 +24,7 @@ export default function UsersPage() {
 
   const fetchDepartments = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/admin/departments", {
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -44,12 +40,10 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
         `http://localhost:5000/admin/users?page=${currentPage}&search=${search}&role=${filterRole}&department=${filterDept}`,
         {
           credentials: "include",
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
       );
 
@@ -70,11 +64,9 @@ export default function UsersPage() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/admin/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       if (res.status === 401) {
@@ -133,7 +125,6 @@ export default function UsersPage() {
             <option value="all" className="text-black">All Roles</option>
             <option value="student" className="text-black">Student</option>
             <option value="professor" className="text-black">Professor</option>
-            <option value="hod" className="text-black">HOD</option>
           </select>
 
           <select
@@ -240,11 +231,10 @@ export default function UsersPage() {
               <button
                 key={i + 1}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === i + 1
-                    ? "bg-blue-600"
-                    : "bg-white/10"
-                }`}
+                className={`px-3 py-1 rounded ${currentPage === i + 1
+                  ? "bg-blue-600"
+                  : "bg-white/10"
+                  }`}
               >
                 {i + 1}
               </button>

@@ -13,20 +13,18 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
 
   useEffect(() => {
     loadDepartments();
-    loadUser();
+    fetchUser();
   }, []);
 
   const loadDepartments = async () => {
-    const token = localStorage.getItem('token');
-    const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include', headers: token ? { Authorization: `Bearer ${token}` } : {}});
+    const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include' });
     if (res.status === 401) { window.location.href = '/'; return; }
     const data = await res.json();
     setDepartments(data || []);
   };
 
-  const loadUser = async () => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`http://localhost:5000/admin/users/${userId}`, { credentials: 'include', headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  const fetchUser = async () => {
+    const res = await fetch(`http://localhost:5000/admin/users/${userId}`, { credentials: 'include' });
     if (res.status === 401) { window.location.href = '/'; return; }
     const data = await res.json();
 
@@ -40,11 +38,14 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
   };
 
   const updateUser = async () => {
-    const token = localStorage.getItem('token');
+    // The instruction provided a malformed snippet.
+    // Interpreting the intent to change method to PATCH and remove Authorization header.
+    // Also, assuming 'form' should be used for the body, not 'formData' as it's not defined.
+    // The 'try' block was also incomplete in the instruction, so keeping the original structure.
     const res = await fetch(`http://localhost:5000/admin/users/${userId}`, {
-      method: "PUT",
-      headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
-      credentials: 'include',
+      method: "PATCH", // Changed from PUT to PATCH
+      credentials: "include",
+      headers: { "Content-Type": "application/json" }, // Removed Authorization header logic
       body: JSON.stringify(form),
     });
 
@@ -70,28 +71,28 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
 
         <div className="flex flex-col gap-4">
 
-          <input 
+          <input
             type="text"
             value={form.name}
             className="bg-white/10 p-3 rounded-xl"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
 
-          <input 
+          <input
             type="email"
             value={form.email}
             className="bg-white/10 p-3 rounded-xl"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
 
-          <input 
+          <input
             type="password"
             placeholder="Leave empty to keep same password"
             className="bg-white/10 p-3 rounded-xl"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
 
-          <select 
+          <select
             value={form.departmentId}
             className="bg-white/10 p-3 rounded-xl"
             onChange={(e) => setForm({ ...form, departmentId: e.target.value })}
@@ -104,7 +105,7 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
             ))}
           </select>
 
-          <input 
+          <input
             type="text"
             value={form.role}
             disabled
@@ -113,7 +114,7 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
 
         </div>
 
-        <button 
+        <button
           onClick={updateUser}
           className="mt-6 w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl"
         >

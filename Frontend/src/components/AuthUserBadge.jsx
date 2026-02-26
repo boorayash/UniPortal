@@ -1,22 +1,10 @@
-import {jwtDecode} from "jwt-decode";
-
 export default function AuthUserBadge() {
-  const token = localStorage.getItem("token");
-  if (!token) return null;
+  const role = localStorage.getItem("role");
+  const name = localStorage.getItem("name");
 
-  let user;
-  try {
-    user = jwtDecode(token);
-  } catch {
-    return null;
-  }
+  if (!role) return null;
 
-  const displayName =
-    user.name ||
-    (user.role === "admin" ? "Admin" : null) ||
-    user.email ||
-    "User";
-
+  const displayName = name || (role === "admin" ? "Admin" : "User");
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
@@ -26,7 +14,7 @@ export default function AuthUserBadge() {
           {displayName}
         </span>
         <span className="text-xs text-gray-400 capitalize">
-          {user.role}
+          {role}
         </span>
       </div>
 
@@ -36,4 +24,4 @@ export default function AuthUserBadge() {
     </div>
   );
 }
-
+ 

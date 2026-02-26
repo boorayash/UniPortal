@@ -6,6 +6,7 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
   const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,18 +21,20 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
       return;
     }
 
+    setLoading(true);
+    setMessage("");
+
     const formData = new FormData();
     files.forEach(file => formData.append("files", file));
     formData.append("category", category);
     formData.append("description", description);
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
         "http://localhost:5000/student/assignments/bulk-upload",
         {
           method: "POST",
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          credentials: "include",
           body: formData
         }
       );
@@ -46,6 +49,8 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
       }
     } catch {
       setMessage("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,9 +96,16 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
 
             <button
               type="submit"
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl"
+              disabled={loading}
+              className={`w-full py-3 rounded-xl transition ${loading
+                  ? "bg-blue-600/50 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
-              Upload {files.length > 0 && `(${files.length})`}
+              {loading
+                ? `Uploading ${files.length} files...`
+                : `Upload ${files.length > 0 ? `(${files.length})` : ""}`
+              }
             </button>
 
             {message && (

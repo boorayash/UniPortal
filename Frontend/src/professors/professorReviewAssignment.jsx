@@ -17,7 +17,7 @@ export default function ReviewAssignment() {
     const token = localStorage.getItem("token");
     const res = await fetch(
       `http://localhost:5000/professor/assignments/${id}/review`,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { credentials: 'include' }
     );
     setData(await res.json());
   };
@@ -29,14 +29,12 @@ export default function ReviewAssignment() {
       return;
     }
 
-    const token = localStorage.getItem("token");
-
     const res = await fetch(
       `http://localhost:5000/professor/assignments/${id}/approve`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ remarks, signature })
@@ -65,14 +63,13 @@ export default function ReviewAssignment() {
     );
     if (!confirmReject) return;
 
-    const token = localStorage.getItem("token");
 
     const res = await fetch(
       `http://localhost:5000/professor/assignments/${id}/reject`,
       {
         method: "POST",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ remarks })
@@ -152,7 +149,7 @@ export default function ReviewAssignment() {
           <div className="lg:col-span-2">
             <Card title="Assignment File Preview">
               <iframe
-                src={`http://localhost:5000/files/${data.filename}`}
+                src={data.fileUrl}
                 className="w-full h-[520px] rounded-xl border border-white/20 bg-black"
                 title="Assignment Preview"
               />

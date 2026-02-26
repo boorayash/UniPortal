@@ -16,11 +16,10 @@ export default function ProfessorAssignments() {
 
   const fetchAssignments = async () => {
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
         "http://localhost:5000/professor/assignments",
         {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
+          credentials: 'include'
         }
       );
 
@@ -84,10 +83,9 @@ export default function ProfessorAssignments() {
                     key={s}
                     onClick={() => setFilterStatus(s)}
                     className={`px-3 py-1.5 rounded-full text-xs capitalize transition
-                      ${
-                        filterStatus === s
-                          ? "bg-blue-600 text-white"
-                          : "bg-white/10 hover:bg-white/20"
+                      ${filterStatus === s
+                        ? "bg-blue-600 text-white"
+                        : "bg-white/10 hover:bg-white/20"
                       }`}
                   >
                     {s}
@@ -142,7 +140,7 @@ export default function ProfessorAssignments() {
                             <button
                               onClick={() =>
                                 window.location.href =
-                                  `/professor/assignments/${a._id}/review`
+                                `/professor/assignments/${a._id}/review`
                               }
                               className="px-4 py-1.5 bg-emerald-600/20 text-emerald-300 rounded-lg text-xs hover:bg-emerald-600/30"
                             >

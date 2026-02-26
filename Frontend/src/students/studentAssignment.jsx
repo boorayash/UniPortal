@@ -25,9 +25,8 @@ export default function StudentAssignments() {
 
   const fetchAssignments = async () => {
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:5000/student/assignments", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
+        credentials: "include"
       });
 
       if (res.status === 401) {
@@ -92,10 +91,9 @@ export default function StudentAssignments() {
                     key={s}
                     onClick={() => setFilterStatus(s)}
                     className={`px-3 py-1.5 rounded-full text-xs capitalize transition
-                      ${
-                        filterStatus === s
-                          ? "bg-blue-600 text-white"
-                          : "bg-white/10 text-gray-300 hover:bg-white/20"
+                      ${filterStatus === s
+                        ? "bg-blue-600 text-white"
+                        : "bg-white/10 text-gray-300 hover:bg-white/20"
                       }`}
                   >
                     {s}

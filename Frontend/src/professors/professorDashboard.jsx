@@ -12,10 +12,7 @@ export default function ProfessorDashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/professor/dashboard", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      const res = await fetch("http://localhost:5000/professor/dashboard", { credentials: 'include' });
 
       if (!res.ok) {
         window.location.href = "/";
@@ -101,7 +98,7 @@ export default function ProfessorDashboard() {
                         <button
                           onClick={() =>
                             window.location.href =
-                              `/professor/assignments/${a._id}/review`
+                            `/professor/assignments/${a._id}/review`
                           }
                           className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-lg text-sm"
                         >

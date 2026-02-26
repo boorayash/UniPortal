@@ -29,11 +29,7 @@ export default function Departments() {
 
   const fetchDepartments = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/admin/departments", {
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -51,14 +47,10 @@ export default function Departments() {
     if (!name.trim() || !code.trim()) return;
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:5000/admin/departments", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, code, type }),
       });
 
@@ -86,11 +78,9 @@ export default function Departments() {
     if (!window.confirm("Delete this department?")) return;
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/admin/departments/${id}`, {
         method: "DELETE",
         credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       if (res.status === 401) {
@@ -114,14 +104,10 @@ export default function Departments() {
     if (!editName.trim() || !editCode.trim()) return;
 
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(`http://localhost:5000/admin/departments/${editId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: editName,
           code: editCode,
@@ -307,9 +293,8 @@ export default function Departments() {
               <button
                 key={i + 1}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === i + 1 ? "bg-blue-600" : "bg-white/10"
-                }`}
+                className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-600" : "bg-white/10"
+                  }`}
               >
                 {i + 1}
               </button>
