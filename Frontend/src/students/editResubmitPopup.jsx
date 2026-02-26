@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_URL from '../config/api';
 
 export default function EditResubmitPopup({ assignment, onClose, onSuccess }) {
   const [description, setDescription] = useState(assignment.description);
@@ -8,7 +9,7 @@ export default function EditResubmitPopup({ assignment, onClose, onSuccess }) {
     setLoading(true);
 
     const res = await fetch(
-      `http://localhost:5000/student/assignments/${assignment._id}/resubmit`,
+      `${API_URL}/student/assignments/${assignment._id}/resubmit`,
       {
         method: "PUT",
         credentials: 'include',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Mail, ArrowLeft, Loader2, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import API_URL from '../config/api';
 
 function TiltCard({ children }) {
     const x = useMotionValue(0);
@@ -42,7 +43,7 @@ export default function ForgotPassword() {
         setError('');
 
         try {
-            const response = await fetch("http://localhost:5000/auth/forgot-password", {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

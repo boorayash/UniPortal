@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Reuse from "./reuse";
+import API_URL from '../config/api';
 
 export default function Departments() {
   const [departments, setDepartments] = useState([]);
@@ -29,7 +30,7 @@ export default function Departments() {
 
   const fetchDepartments = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include' });
+      const res = await fetch(`${API_URL}/admin/departments`, { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -47,7 +48,7 @@ export default function Departments() {
     if (!name.trim() || !code.trim()) return;
 
     try {
-      const res = await fetch("http://localhost:5000/admin/departments", {
+      const res = await fetch(`${API_URL}/admin/departments`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -78,7 +79,7 @@ export default function Departments() {
     if (!window.confirm("Delete this department?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/admin/departments/${id}`, {
+      const res = await fetch(`${API_URL}/admin/departments/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -104,7 +105,7 @@ export default function Departments() {
     if (!editName.trim() || !editCode.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/admin/departments/${editId}`, {
+      const res = await fetch(`${API_URL}/admin/departments/${editId}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

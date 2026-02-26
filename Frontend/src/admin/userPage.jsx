@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Reuse from "./reuse";
 import AddUserPopup from "./addUserPopup";
 import EditUserPopup from "./editUserPopup";
+import API_URL from '../config/api';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -24,7 +25,7 @@ export default function UsersPage() {
 
   const fetchDepartments = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin/departments", { credentials: 'include' });
+      const res = await fetch(`${API_URL}/admin/departments`, { credentials: 'include' });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -41,7 +42,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/admin/users?page=${currentPage}&search=${search}&role=${filterRole}&department=${filterDept}`,
+        `${API_URL}/admin/users?page=${currentPage}&search=${search}&role=${filterRole}&department=${filterDept}`,
         {
           credentials: "include",
         }
@@ -64,7 +65,7 @@ export default function UsersPage() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/admin/users/${userId}`, {
+      const res = await fetch(`${API_URL}/admin/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
       });

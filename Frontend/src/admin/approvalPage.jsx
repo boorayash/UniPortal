@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminReuse from "./reuse";
 import { Check, X, Clock, UserCheck } from "lucide-react";
+import API_URL from '../config/api';
 
 export default function ApprovalPage() {
     const [pendingUsers, setPendingUsers] = useState([]);
@@ -9,7 +10,7 @@ export default function ApprovalPage() {
 
     const fetchPending = async () => {
         try {
-            const response = await fetch('http://localhost:5000/admin/pending-users', {
+            const response = await fetch(`${API_URL}/admin/pending-users`, {
                 credentials: 'include'
             });
             if (response.status === 401) { window.location.href = "/"; return; }
@@ -27,7 +28,7 @@ export default function ApprovalPage() {
     const handleAction = async (userId, action) => {
         setActionLoading(userId);
         try {
-            const response = await fetch(`http://localhost:5000/admin/${action === 'approve' ? 'approve' : 'reject'}-user/${userId}`, {
+            const response = await fetch(`${API_URL}/admin/${action === 'approve' ? 'approve' : 'reject'}-user/${userId}`, {
                 method: action === 'approve' ? 'POST' : 'DELETE',
                 credentials: 'include'
             });

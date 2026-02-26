@@ -113,6 +113,24 @@ exports.logout = (req, res) => {
     return res.json({ message: "Logout successful" });
 };
 
+exports.verifyToken = (req, res) => {
+    const token = req.cookies?.token;
+    if (!token) {
+        return res.status(401).json({ authenticated: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return res.json({
+            authenticated: true,
+            role: decoded.role,
+            name: decoded.name
+        });
+    } catch (err) {
+        return res.status(401).json({ authenticated: false });
+    }
+};
+
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
     if (!email) {

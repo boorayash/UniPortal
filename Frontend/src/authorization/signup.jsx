@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { User, Lock, Mail, ArrowRight, ChevronDown } from 'lucide-react';
+import API_URL from '../config/api';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -15,7 +16,7 @@ export default function Signup() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/auth/departments")
+    fetch(`${API_URL}/auth/departments`)
       .then(res => res.json())
       .then(data => setDepartments(data || []))
       .catch(() => setDepartments([]));
@@ -33,7 +34,7 @@ export default function Signup() {
     setMessage('');
 
     try {
-      const res = await fetch("http://localhost:5000/auth/signup", {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role, departmentId }),

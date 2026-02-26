@@ -8,6 +8,7 @@ router.post("/signup", authController.signup);
 router.post("/logout", authController.logout);
 router.post("/forgot-password", authController.forgotPassword);
 router.patch("/reset-password/:token", authController.resetPassword);
+router.get("/verify", authController.verifyToken);
 
 // Public endpoint for signup department dropdown
 router.get("/departments", async (req, res) => {

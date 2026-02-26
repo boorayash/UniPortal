@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_URL from '../config/api';
 
 export default function UploadAssignmentPopup({ onClose, onSuccess }) {
   const [title, setTitle] = useState("");
@@ -27,7 +28,7 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/student/assignments/upload",
+        `${API_URL}/student/assignments/upload`,
         {
           method: "POST",
           credentials: 'include',

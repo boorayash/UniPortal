@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Key, Lock, Loader2, Check } from 'lucide-react';
+import API_URL from '../config/api';
 
 function TiltCard({ children }) {
     const x = useMotionValue(0);
@@ -47,7 +48,7 @@ export default function ResetPassword() {
         setError('');
 
         try {
-            const response = await fetch(`http://localhost:5000/auth/reset-password/${token}`, {
+            const response = await fetch(`${API_URL}/auth/reset-password/${token}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ password }),

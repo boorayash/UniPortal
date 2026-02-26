@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_URL from '../config/api';
 
 export default function BulkUploadPopup({ onClose, onSuccess }) {
   const [files, setFiles] = useState([]);
@@ -31,7 +32,7 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/student/assignments/bulk-upload",
+        `${API_URL}/student/assignments/bulk-upload`,
         {
           method: "POST",
           credentials: "include",

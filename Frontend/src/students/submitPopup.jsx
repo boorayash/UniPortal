@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_URL from '../config/api';
 
 export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess }) {
   const [professors, setProfessors] = useState([]);
@@ -10,8 +11,7 @@ export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess 
   }, []);
 
   const fetchProfessors = async () => {
-    const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/student/professors", {
+    const res = await fetch(`${API_URL}/student/professors`, {
       credentials: "include",
     });
     const data = await res.json();
@@ -23,8 +23,7 @@ export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess 
 
     setLoading(true);
 
-    const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:5000/student/assignments/${assignmentId}/submit`, {
+    const res = await fetch(`${API_URL}/student/assignments/${assignmentId}/submit`, {
       method: "POST",
       credentials: "include",
       headers: {
