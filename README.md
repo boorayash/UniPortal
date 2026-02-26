@@ -404,7 +404,3 @@ When deploying to production:
 3. **Database** — Use [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier available).
 
 ---
-
-<p align="center">
-  Built with ❤️ for Chitkara University
-</p>
