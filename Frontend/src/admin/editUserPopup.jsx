@@ -44,7 +44,7 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
     // Also, assuming 'form' should be used for the body, not 'formData' as it's not defined.
     // The 'try' block was also incomplete in the instruction, so keeping the original structure.
     const res = await fetch(`${API_URL}/admin/users/${userId}`, {
-      method: "PATCH", // Changed from PUT to PATCH
+      method: "PUT",
       credentials: "include",
       headers: { "Content-Type": "application/json" }, // Removed Authorization header logic
       body: JSON.stringify(form),

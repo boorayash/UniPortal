@@ -8,7 +8,7 @@ router.get("/departments-list", userController.getDepartmentsList);
 // GET USERS WITH PAGINATION, SEARCH, FILTERS
 router.get("/users", verifyAdmin, userController.getUsers);
 
-router.post("/users/create", verifyAdmin, userController.createUser);
+router.post("/users", verifyAdmin, userController.createUser);
 
 router.get("/users/:id", verifyToken, userController.getUserById);
 

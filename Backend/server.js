@@ -31,7 +31,9 @@ mongoose.connect(MONGO_URI)
 const { loginLimiter } = require('./middleware/rateLimiter.js');
 app.use('/auth/login', loginLimiter);
 app.use('/auth', authRoutes);
-app.use('/admin', adminRoutes, departmentRoutes, userRoutes);
+app.use('/admin', adminRoutes);
+app.use('/admin', departmentRoutes);
+app.use('/admin', userRoutes);
 app.use('/student', studentRoutes);
 app.use('/professor', professorRoutes);
 
