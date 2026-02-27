@@ -63,7 +63,7 @@ export default function ForgotPassword() {
     return (
         <div className="min-h-screen w-full bg-black flex items-center justify-center p-4">
             <TiltCard>
-                <Link to="/login" className="inline-flex items-center text-slate-400 hover:text-white mb-6 transition-colors">
+                <Link to="/" className="inline-flex items-center text-slate-400 hover:text-white mb-6 transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Login
                 </Link>

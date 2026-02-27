@@ -1,4 +1,4 @@
-const path = require("path");
+
 const mongoose = require("mongoose");
 const Assignment = require("../model/schema/assignment");
 const Activity = require("../model/schema/activity");
@@ -24,7 +24,7 @@ exports.getProfessorDashboard = async (req, res) => {
         const formatted = pendingAssignments.map(a => ({
             _id: a._id,
             title: a.title,
-            studentName: a.assignedTo.name,
+            studentName: a.assignedTo?.name || "Deleted User",
             submittedAt: a.submittedAt,
             daysPending: Math.floor(
                 (Date.now() - new Date(a.submittedAt)) / (1000 * 60 * 60 * 24)
@@ -108,12 +108,12 @@ exports.getAssignmentForReview = async (req, res) => {
             id: assignment._id,
             title: assignment.title,
             description: assignment.description,
-            studentName: assignment.assignedTo.name,
+            studentName: assignment.assignedTo?.name || "Deleted User",
             status: assignment.status,
             submittedAt: assignment.submittedAt,
             fileUrl: assignment.filePath,
-            filename: path.basename(assignment.filePath),
-            course: assignment.department.name,
+            filename: assignment.filePath?.split('/').pop() || "file.pdf",
+            course: assignment.department?.name || "Unknown",
             dueDate: assignment.deadline
         });
 
