@@ -40,12 +40,12 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
       {/* Sidebar */}
       <StudentReuse />
 
       {/* Content */}
-      <div className="flex-1 p-10 transition-opacity duration-300">
+      <div className="flex-1 p-4 md:p-10 transition-opacity duration-300">
 
         {loading ? (
           <div className="text-gray-400 animate-fadeIn">
@@ -54,7 +54,7 @@ export default function StudentDashboard() {
         ) : (
           <>
             {/* Header */}
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
               <h1 className="text-3xl font-bold">
                 Assignment Dashboard
               </h1>
@@ -73,7 +73,7 @@ export default function StudentDashboard() {
             <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10">
 
               {/* Header */}
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
                 <h2 className="text-xl font-semibold tracking-wide">
                   Recent Submissions
                 </h2>

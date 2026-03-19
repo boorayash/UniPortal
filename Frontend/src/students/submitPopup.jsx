@@ -25,7 +25,6 @@ export default function SubmitForReviewPopup({ assignmentId, onClose, onSuccess 
 
     const res = await fetch(`${API_URL}/student/assignments/${assignmentId}/submit`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
       body: JSON.stringify({ reviewerId: reviewer })
     }

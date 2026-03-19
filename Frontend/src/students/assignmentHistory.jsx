@@ -53,7 +53,7 @@ export default function AssignmentHistory({ assignment }) {
           const isLatest = i === events.length - 1;
 
           return (
-            <div key={i} className="flex gap-4 items-start">
+            <div key={i} className="flex flex-col md:flex-row gap-4 items-start">
 
               {/* Timeline dot */}
               <div

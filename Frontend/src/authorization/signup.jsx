@@ -93,7 +93,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-[#0a0f1f] to-[#1c0033] p-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-black via-[#0a0f1f] to-[#1c0033] p-4 relative overflow-hidden">
 
       {/* Animated neon blobs */}
       <div className="absolute inset-0 pointer-events-none">
@@ -111,7 +111,7 @@ export default function Signup() {
             <User className="w-10 h-10 text-white" />
           </div>
 
-          <h1 className="text-4xl font-bold text-white tracking-tight">Create Account</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-white tracking-tight">Create Account</h1>
           <p className="text-white/70 mt-1">Join UniPortal today</p>
         </div>
 

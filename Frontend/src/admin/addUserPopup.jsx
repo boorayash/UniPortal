@@ -27,7 +27,6 @@ export default function AddUserPopup({ close }) {
     try {
       const res = await fetch(`${API_URL}/admin/users`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({
           name,

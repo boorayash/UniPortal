@@ -3,15 +3,15 @@ import LogoutButton from "../components/LogoutButton";
 
 export default function AdminReuse() {
   return (
-    <aside className="w-64 h-screen bg-white/10 backdrop-blur-xl border-r border-white/10 flex flex-col shrink-0">
+    <aside className="w-full md:w-64 h-auto md:h-screen z-50 relative bg-white/10 backdrop-blur-xl border-b md:border-b-0 md:border-r border-white/10 flex flex-col shrink-0">
 
       {/* Title + Nav */}
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-8 text-white">
+      <div className="p-4 md:p-6">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-8 text-white shrink-0">
           Admin Panel
         </h2>
 
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-row md:flex-col gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 no-scrollbar snap-x">
           <NavItem to="/admin/dashboard" label="Dashboard" />
           <NavItem to="/admin/departments" label="Departments" />
           <NavItem to="/admin/users" label="Users" />
@@ -20,10 +20,10 @@ export default function AdminReuse() {
       </div>
 
       {/* Spacer */}
-      <div className="flex-1" />
+      <div className="hidden md:block flex-1" />
 
       {/* Logout */}
-      <div className="p-6 border-t border-white/10 flex justify-center">
+      <div className="p-4 md:p-6 border-t border-white/10 flex justify-center">
         <LogoutButton className="w-full" />
       </div>
     </aside>

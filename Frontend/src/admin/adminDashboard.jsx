@@ -47,13 +47,13 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="h-screen flex flex-col md:flex-row overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
       {/* Sidebar (FIXED) */}
       <Reuse />
 
       {/* Dashboard Scroll Area */}
-      <div className="relative flex-1 overflow-y-auto p-10">
+      <div className="relative flex-1 overflow-y-auto p-4 md:p-10">
 
         {/* Background Blobs */}
         <div className="absolute inset-0 pointer-events-none">
@@ -64,14 +64,14 @@ export default function AdminDashboard() {
 
         {/* Header */}
         <div className="relative flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-bold drop-shadow-lg">
+          <h1 className="text-2xl md:text-4xl font-bold drop-shadow-lg">
             Admin Dashboard
           </h1>
           <AuthUserBadge />
         </div>
 
         {/* Stats */}
-        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <AdminStatCard title="Total Departments" value={stats.departments} color="indigo" to="/admin/departments" />
           <AdminStatCard title="Total Students" value={stats.students} color="green" to="/admin/users?role=student" />
           <AdminStatCard title="Total Professors" value={stats.professors} color="orange" to="/admin/users?role=professor" />

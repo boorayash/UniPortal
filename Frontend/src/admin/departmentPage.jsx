@@ -50,7 +50,6 @@ export default function Departments() {
     try {
       const res = await fetch(`${API_URL}/admin/departments`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ name, code, type }),
       });
@@ -107,7 +106,6 @@ export default function Departments() {
     try {
       const res = await fetch(`${API_URL}/admin/departments/${editId}`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({
           name: editName,
@@ -148,15 +146,15 @@ export default function Departments() {
   );
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
       {/* Sidebar */}
       <Reuse />
 
       {/* Content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-4 md:p-10">
 
-        <h1 className="text-4xl font-bold mb-10">Departments</h1>
+        <h1 className="text-2xl md:text-4xl font-bold mb-10">Departments</h1>
 
         {/* Add Department */}
         <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl mb-8 border border-white/10">
@@ -199,7 +197,7 @@ export default function Departments() {
         </div>
 
         {/* Search & Filter */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
           <input
             placeholder="Search department..."
             value={searchQuery}
@@ -221,7 +219,8 @@ export default function Departments() {
 
         {/* Table */}
         <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10">
-          <table className="w-full text-left">
+          <div className="overflow-x-auto w-full">
+<table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/20 text-sm text-gray-300">
                 <th>#</th>
@@ -277,6 +276,7 @@ export default function Departments() {
               ))}
             </tbody>
           </table>
+</div>
         </div>
 
         {/* Pagination */}

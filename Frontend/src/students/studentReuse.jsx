@@ -3,16 +3,16 @@ import LogoutButton from "../components/LogoutButton";
 
 export default function StudentReuse() {
   return (
-    <aside className="w-64 min-h-screen bg-white/10 backdrop-blur-xl border-r border-white/10 flex flex-col">
+    <aside className="w-full md:w-64 h-auto md:min-h-screen bg-white/10 backdrop-blur-xl border-b md:border-b-0 md:border-r border-white/10 flex flex-col">
 
       {/* Title */}
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-8 text-white">
+      <div className="p-4 md:p-6">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-8 text-white shrink-0">
           Student Panel
         </h2>
 
         {/* Navigation */}
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-row md:flex-col gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 no-scrollbar snap-x">
           <NavItem to="/student/dashboard" label="Dashboard" />
           <NavItem to="/student/assignments" label="Assignments" />
         </nav>

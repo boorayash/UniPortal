@@ -33,7 +33,6 @@ export default function ReviewAssignment() {
       `${API_URL}/professor/assignments/${id}/approve`,
       {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ remarks, signature })
       }
@@ -66,7 +65,6 @@ export default function ReviewAssignment() {
       `${API_URL}/professor/assignments/${id}/reject`,
       {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ remarks })
       }
@@ -82,19 +80,19 @@ export default function ReviewAssignment() {
     }
   };
 
-  if (!data) return <p className="text-white p-10">Loading...</p>;
+  if (!data) return <p className="text-white p-4 md:p-10">Loading...</p>;
 
   /* ✅ FIX: derive filename correctly */
   // const filename = data.filePath.split("/").pop();
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
       <ProfessorReuse />
 
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-4 md:p-10">
 
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
           <h1 className="text-3xl font-bold">Review Assignment</h1>
           <AuthUserBadge />
         </div>

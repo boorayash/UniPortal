@@ -45,7 +45,6 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
     // The 'try' block was also incomplete in the instruction, so keeping the original structure.
     const res = await fetch(`${API_URL}/admin/users/${userId}`, {
       method: "PUT",
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` }, // Removed Authorization header logic
       body: JSON.stringify(form),
     });

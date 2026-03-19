@@ -88,17 +88,17 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
       {/* Sidebar */}
       <Reuse />
 
       {/* Content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-4 md:p-10">
 
         {/* Header + Add */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Users</h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold">Users</h1>
 
           <button
             onClick={() => setShowAddPopup(true)}
@@ -144,7 +144,8 @@ export default function UsersPage() {
 
         {/* Table */}
         <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-lg">
-          <table className="w-full text-left">
+          <div className="overflow-x-auto w-full">
+<table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/20 text-sm text-gray-300">
                 <th>#</th>
@@ -209,6 +210,7 @@ export default function UsersPage() {
               ))}
             </tbody>
           </table>
+</div>
 
           {users.length === 0 && (
             <p className="text-gray-400 text-center mt-4">

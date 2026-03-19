@@ -36,13 +36,13 @@ export default function ProfessorDashboard() {
     : 0;
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
       {/* Sidebar */}
       <ProfessorReuse />
 
       {/* Main */}
-      <div className="flex-1 p-10 transition-opacity duration-300">
+      <div className="flex-1 p-4 md:p-10 transition-opacity duration-300">
 
         {loading ? (
           <p className="text-gray-400 animate-fadeIn">
@@ -51,7 +51,7 @@ export default function ProfessorDashboard() {
         ) : (
           <>
             {/* Header */}
-            <div className="flex justify-between items-center mb-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-10">
               <h1 className="text-3xl font-bold">
                 Professor Dashboard
               </h1>
@@ -81,7 +81,7 @@ export default function ProfessorDashboard() {
                   {assignments.map(a => (
                     <div
                       key={a._id}
-                      className="flex justify-between items-center py-4"
+                      className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 py-4"
                     >
                       {/* Left */}
                       <div>

@@ -67,7 +67,6 @@ export default function Login() {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ email: username, password }),
       });
@@ -125,7 +124,7 @@ export default function Login() {
             >
               <Lock className="w-10 h-10 text-white" />
             </motion.div>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight">Welcome to UniPortal</h1>
+            <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">Welcome to UniPortal</h1>
             <p className="text-slate-400 mt-2 font-medium">Enter your credentials to continue</p>
           </div>
 

@@ -25,7 +25,7 @@ export default function AdminStatCard({ title, value, color, to }) {
       `}
     >
       <p className="text-sm opacity-80">{title}</p>
-      <h2 className="text-4xl font-bold mt-3">{value}</h2>
+      <h2 className="text-2xl md:text-4xl font-bold mt-3">{value}</h2>
 
       <p className="mt-4 text-xs opacity-60">
         Click to view →
