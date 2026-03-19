@@ -30,7 +30,7 @@ export default function Departments() {
 
   const fetchDepartments = async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/departments`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/admin/departments`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -50,8 +50,8 @@ export default function Departments() {
     try {
       const res = await fetch(`${API_URL}/admin/departments`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ name, code, type }),
       });
 
@@ -81,7 +81,7 @@ export default function Departments() {
     try {
       const res = await fetch(`${API_URL}/admin/departments/${id}`, {
         method: "DELETE",
-        credentials: "include",
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
 
       if (res.status === 401) {
@@ -107,8 +107,8 @@ export default function Departments() {
     try {
       const res = await fetch(`${API_URL}/admin/departments/${editId}`, {
         method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({
           name: editName,
           code: editCode,

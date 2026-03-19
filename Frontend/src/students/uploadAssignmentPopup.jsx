@@ -31,7 +31,7 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
         `${API_URL}/student/assignments/upload`,
         {
           method: "POST",
-          credentials: 'include',
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
           body: formData
         }
       );

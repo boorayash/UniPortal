@@ -17,7 +17,7 @@ export default function ReviewAssignment() {
   const fetchData = async () => {
     const res = await fetch(
       `${API_URL}/professor/assignments/${id}/review`,
-      { credentials: 'include' }
+      { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
     );
     setData(await res.json());
   };
@@ -33,10 +33,8 @@ export default function ReviewAssignment() {
       `${API_URL}/professor/assignments/${id}/approve`,
       {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ remarks, signature })
       }
     );
@@ -68,10 +66,8 @@ export default function ReviewAssignment() {
       `${API_URL}/professor/assignments/${id}/reject`,
       {
         method: "POST",
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ remarks })
       }
     );

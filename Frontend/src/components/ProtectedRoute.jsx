@@ -9,7 +9,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
         const verify = async () => {
             try {
                 const res = await fetch(`${API_URL}/auth/verify`, {
-                    credentials: 'include',
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 });
 
                 if (!res.ok) {

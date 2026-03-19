@@ -12,7 +12,7 @@ export default function EditResubmitPopup({ assignment, onClose, onSuccess }) {
       `${API_URL}/student/assignments/${assignment._id}/resubmit`,
       {
         method: "PUT",
-        credentials: 'include',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ description })
       }
     );

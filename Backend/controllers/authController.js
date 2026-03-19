@@ -153,6 +153,7 @@ exports.login = async (req, res, next) => {
         return res.json({
             message: "Login successful",
             role,
+            token,
             name: user.name || "Admin"
         });
     } catch (err) {
@@ -172,7 +173,7 @@ exports.logout = (req, res) => {
 };
 
 exports.verifyToken = (req, res) => {
-    const token = req.cookies?.token;
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
     if (!token) {
         return res.status(401).json({ authenticated: false });
     }

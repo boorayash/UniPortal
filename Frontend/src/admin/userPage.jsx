@@ -25,7 +25,7 @@ export default function UsersPage() {
 
   const fetchDepartments = async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/departments`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/admin/departments`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -44,7 +44,7 @@ export default function UsersPage() {
       const res = await fetch(
         `${API_URL}/admin/users?page=${currentPage}&search=${search}&role=${filterRole}&department=${filterDept}`,
         {
-          credentials: "include",
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         }
       );
 
@@ -67,7 +67,7 @@ export default function UsersPage() {
     try {
       const res = await fetch(`${API_URL}/admin/users/${userId}`, {
         method: "DELETE",
-        credentials: "include",
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
 
       if (res.status === 401) {

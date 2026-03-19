@@ -5,7 +5,7 @@ export default function LogoutButton({ className = "" }) {
     try {
       await fetch(`${API_URL}/auth/logout`, {
         method: "POST",
-        credentials: "include",
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
     } catch (err) {
       console.error("Logout API error:", err);

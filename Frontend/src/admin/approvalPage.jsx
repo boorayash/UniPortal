@@ -10,9 +10,7 @@ export default function ApprovalPage() {
 
     const fetchPending = async () => {
         try {
-            const response = await fetch(`${API_URL}/admin/pending-users`, {
-                credentials: 'include'
-            });
+            const response = await fetch(`${API_URL}/admin/pending-users`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             if (response.status === 401) { window.location.href = "/"; return; }
             const data = await response.json();
             setPendingUsers(data || []);
@@ -30,7 +28,7 @@ export default function ApprovalPage() {
         try {
             const response = await fetch(`${API_URL}/admin/${action === 'approve' ? 'approve' : 'reject'}-user/${userId}`, {
                 method: action === 'approve' ? 'POST' : 'DELETE',
-                credentials: 'include'
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             if (response.status === 401) { window.location.href = "/"; return; }
             if (response.ok) {

@@ -35,7 +35,7 @@ export default function BulkUploadPopup({ onClose, onSuccess }) {
         `${API_URL}/student/assignments/bulk-upload`,
         {
           method: "POST",
-          credentials: "include",
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
           body: formData
         }
       );

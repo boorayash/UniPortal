@@ -26,9 +26,7 @@ export default function StudentAssignments() {
 
   const fetchAssignments = async () => {
     try {
-      const res = await fetch(`${API_URL}/student/assignments`, {
-        credentials: "include"
-      });
+      const res = await fetch(`${API_URL}/student/assignments`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (res.status === 401) {
         window.location.href = "/";

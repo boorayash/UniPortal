@@ -13,7 +13,7 @@ export default function ProfessorDashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const res = await fetch(`${API_URL}/professor/dashboard`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/professor/dashboard`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (!res.ok) {
         window.location.href = "/";

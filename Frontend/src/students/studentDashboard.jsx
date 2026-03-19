@@ -22,7 +22,7 @@ export default function StudentDashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const res = await fetch(`${API_URL}/student/dashboard`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/student/dashboard`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (res.status === 401) {
         window.location.href = "/";

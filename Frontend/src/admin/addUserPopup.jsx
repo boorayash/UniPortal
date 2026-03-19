@@ -13,7 +13,7 @@ export default function AddUserPopup({ close }) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch(`${API_URL}/admin/departments`, { credentials: 'include' })
+    fetch(`${API_URL}/admin/departments`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
       .then(res => { if (res.status === 401) { window.location.href = '/'; return null; } return res.json(); })
       .then(data => setDepartments(data || []));
   }, []);
@@ -27,8 +27,8 @@ export default function AddUserPopup({ close }) {
     try {
       const res = await fetch(`${API_URL}/admin/users`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({
           name,
           email,

@@ -22,7 +22,7 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/dashboard`, { credentials: 'include' });
+      const res = await fetch(`${API_URL}/admin/dashboard`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
       if (res.status === 401) {
         window.location.href = "/";
@@ -38,9 +38,7 @@ export default function AdminDashboard() {
 
   const fetchActivity = async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/activity`, {
-        credentials: 'include'
-      });
+      const res = await fetch(`${API_URL}/admin/activity`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
       const data = await res.json();
       setActivity(data || []);
     } catch (err) {

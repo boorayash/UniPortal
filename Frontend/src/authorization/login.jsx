@@ -4,156 +4,6 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Lock, Loader2, ArrowRight, User, Key } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import API_URL from '../config/api';
-// import * as THREE from 'three';
-
-// function createCircleTexture() {
-//   const canvas = document.createElement('canvas');
-//   const size = 64; // Texture resolution
-//   canvas.width = size;
-//   canvas.height = size;
-//   const ctx = canvas.getContext('2d');
-
-//   // Create a radial gradient (white in center, transparent at edges)
-//   const center = size / 2;
-//   const gradient = ctx.createRadialGradient(center, center, 0, center, center, center);
-//   gradient.addColorStop(0, 'rgba(255, 255, 255, 1)'); // Center color
-//   gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.8)'); // Mid-point
-//   gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Outer edge transparent
-
-//   ctx.fillStyle = gradient;
-//   ctx.fillRect(0, 0, size, size);
-
-//   const texture = new THREE.CanvasTexture(canvas);
-//   // Optional: these settings can sometimes improve visual quality of points
-//   texture.minFilter = THREE.NearestFilter;
-//   texture.magFilter = THREE.NearestFilter;
-//   return texture;
-// }
-
-// function createStarTexture() {
-//   if (typeof document === 'undefined') return null;
-//   const canvas = document.createElement('canvas');
-//   const size = 64;
-//   canvas.width = size;
-//   canvas.height = size;
-//   const ctx = canvas.getContext('2d');
-
-//   const center = size / 2;
-//   const outerRadius = size / 2;
-//   const innerRadius = size / 5;
-//   const spikes = 4; // Change to 5 for a classic star
-
-//   ctx.beginPath();
-//   for (let i = 0; i < spikes * 2; i++) {
-//     const r = i % 2 === 0 ? outerRadius : innerRadius;
-//     const angle = (Math.PI * i) / spikes;
-//     ctx.lineTo(center + Math.cos(angle) * r, center + Math.sin(angle) * r);
-//   }
-//   ctx.closePath();
-
-//   // Gradient fill for a glowing effect
-//   const gradient = ctx.createRadialGradient(center, center, innerRadius, center, center, outerRadius);
-//   gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-//   gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-  
-//   ctx.fillStyle = gradient;
-//   ctx.fill();
-
-//   const texture = new THREE.CanvasTexture(canvas);
-//   return texture;
-// }
-
-// --- 3D PARTICLE BACKGROUND (UPDATED WITH SHAPE) ---
-// function ParticleField() {
-//   const points = useRef();
-//   const count = 5000; 
-
-//   // Generate positions (same as before)
-//   const positions = useMemo(() => {
-//     const pos = new Float32Array(count * 3);
-//     for (let i = 0; i < count; i++) {
-//       pos[i * 3] = (Math.random() - 0.5) * 14; 
-//       pos[i * 3 + 1] = (Math.random() - 0.5) * 14; 
-//       pos[i * 3 + 2] = (Math.random() - 0.5) * 14; 
-//     }
-//     return pos;
-//   }, []);
-
-  // Generate the circle texture once
-//   const circleTexture = useMemo(() => createStarTexture(), []);
-
-//   useFrame((state) => {
-//     const t = state.clock.getElapsedTime();
-//     if (points.current) {
-//       points.current.rotation.y = t * 0.05;
-//       points.current.rotation.x = Math.sin(t * 0.1) * 0.1;
-//     }
-//   });
-
-//   return (
-//     <points ref={points}>
-//       <bufferGeometry>
-//         <bufferAttribute
-//           attach="attributes-position"
-//           count={count}
-//           array={positions}
-//           itemSize={3}
-//         />
-//       </bufferGeometry>
-//       <pointsMaterial
-//         size={0.05} // Increased size slightly for circles
-//         color="#8b5cf6"
-//         map={circleTexture} // <--- Apply the circular texture map
-//         transparent
-//         opacity={0.8} // Increased opacity slightly for better visibility
-//         alphaTest={0.01} // <--- Critical: cuts off the transparent corners of the texture
-//         sizeAttenuation
-//         blending={THREE.AdditiveBlending}
-//         depthWrite={false}
-//       />
-//     </points>
-//   );
-// }
-
-// function FloatingShapes() {
-//   const group = useRef();
-//   const shapes = useMemo(
-//     () =>
-//       Array.from({ length: 150 }, () => ({
-//         position: [
-//           (Math.random() - 0.5) * 14,
-//           (Math.random() - 0.5) * 14,
-//           (Math.random() - 0.5) * 14
-//         ],
-//         rotation: Math.random() * Math.PI
-//       })),
-//     []
-//   );
-
-//   useFrame(({ clock }) => {
-//     if (group.current) {
-//       group.current.rotation.y = clock.elapsedTime * 0.05;
-//     }
-//   });
-
-//   return (
-//     <group ref={group}>
-//       {shapes.map((s, i) => (
-//         <mesh key={i} position={s.position} rotation={[s.rotation, s.rotation, 0]}>
-//           <tetrahedronGeometry args={[0.15]} />
-//           <meshStandardMaterial
-//             color="#8b5cf6"
-//             emissive="#8b5cf6"
-//             emissiveIntensity={0.4}
-//             transparent
-//             opacity={0.7}
-//           />
-//         </mesh>
-//       ))}
-//     </group>
-//   );
-// }
-
 
 // --- 3D TILT CARD (FIXED) ---
 function TiltCard({ children }) {
@@ -217,8 +67,8 @@ export default function Login() {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({ email: username, password }),
       });
 
@@ -229,9 +79,10 @@ export default function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      // Store role for UI routing, but not the token (it's in a cookie)
+      // Store role for UI routing and token for API calls
       localStorage.setItem('role', data.role);
       localStorage.setItem('name', data.name);
+      localStorage.setItem('token', data.token);
       
       // Use navigate with replace
       if (data.role === 'admin') navigate('/admin/dashboard', { replace: true });

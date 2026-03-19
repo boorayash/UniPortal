@@ -45,7 +45,7 @@ export default function ForgotPassword() {
         try {
             const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ email }),
             });
 

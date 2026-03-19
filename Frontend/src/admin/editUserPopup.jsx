@@ -18,14 +18,14 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
   }, []);
 
   const loadDepartments = async () => {
-    const res = await fetch(`${API_URL}/admin/departments`, { credentials: 'include' });
+    const res = await fetch(`${API_URL}/admin/departments`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
     if (res.status === 401) { window.location.href = '/'; return; }
     const data = await res.json();
     setDepartments(data || []);
   };
 
   const fetchUser = async () => {
-    const res = await fetch(`${API_URL}/admin/users/${userId}`, { credentials: 'include' });
+    const res = await fetch(`${API_URL}/admin/users/${userId}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
     if (res.status === 401) { window.location.href = '/'; return; }
     const data = await res.json();
 
@@ -45,8 +45,8 @@ export default function EditUserPopup({ userId, close, onUpdated }) {
     // The 'try' block was also incomplete in the instruction, so keeping the original structure.
     const res = await fetch(`${API_URL}/admin/users/${userId}`, {
       method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" }, // Removed Authorization header logic
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` }, // Removed Authorization header logic
       body: JSON.stringify(form),
     });
 

@@ -19,9 +19,7 @@ export default function ProfessorAssignments() {
     try {
       const res = await fetch(
         `${API_URL}/professor/assignments`,
-        {
-          credentials: 'include'
-        }
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
 
       if (res.status === 401 || res.status === 403) {

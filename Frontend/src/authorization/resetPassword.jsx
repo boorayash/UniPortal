@@ -50,7 +50,7 @@ export default function ResetPassword() {
         try {
             const response = await fetch(`${API_URL}/auth/reset-password/${token}`, {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ password }),
             });
 
