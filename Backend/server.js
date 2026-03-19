@@ -29,6 +29,7 @@ const studentRoutes = require('./routes/studentRoutes.js');
 const professorRoutes = require('./routes/professorRoutes.js');
 
 const app = express();
+app.set('trust proxy', 1);
 
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
