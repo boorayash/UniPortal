@@ -5,7 +5,7 @@ const Admin = require("../model/schema/admin.js");
 const User = require("../model/schema/user.js");
 const sendEmail = require("../utils/email");
 
-exports.signup = async (req, res) => {
+exports.signup = async (req, res, next) => {
     const { name, email, password, role, departmentId } = req.body;
 
     if (!name || !email || !password || !role || !departmentId) {
@@ -24,25 +24,83 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await User.create({
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes from now
+
+        const newUser = await User.create({
             name,
             email,
             password: hashedPassword,
             role,
             department: departmentId,
-            approved: false
+            approved: false,
+            isEmailVerified: false,
+            otp,
+            otpExpires
         });
 
+        // Send Email
+        const message = `Welcome to UniPortal!\n\nYour email verification code is: ${otp}\n\nThis code is valid for 10 minutes. Please enter it on the signup page to verify your account.`;
+        
+        try {
+            await sendEmail({
+                email: newUser.email,
+                subject: 'UniPortal Email Verification OTP',
+                message
+            });
+        } catch (emailErr) {
+            console.error("Error sending OTP email:", emailErr);
+            // Optionally we might want to still let them proceed or allow resend, 
+            // but failing here is safer so they know it didn't send.
+        }
+
         return res.status(201).json({
-            message: "Account created successfully. Please wait for admin approval before logging in."
+            message: "Account created successfully. Please check your email for the OTP to verify your account."
         });
     } catch (err) {
         console.error("Signup error:", err);
-        return res.status(500).json({ message: "Server error during signup" });
+        next(err);
     }
 };
 
-exports.login = async (req, res) => {
+exports.verifyOTP = async (req, res, next) => {
+    try {
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({ message: "Email and OTP are required" });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.isEmailVerified) {
+            return res.status(400).json({ message: "Email is already verified" });
+        }
+
+        if (user.otp !== otp || user.otpExpires < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        // OTP is valid
+        user.isEmailVerified = true;
+        user.otp = undefined;
+        user.otpExpires = undefined;
+        await user.save();
+
+        return res.status(200).json({
+            message: "Email verified successfully! Please wait for an admin to approve your account before logging in."
+        });
+    } catch (err) {
+        console.error("Verify OTP error:", err);
+        next(err);
+    }
+};
+
+exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ message: 'Email and password are required' });
@@ -99,7 +157,7 @@ exports.login = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Server error during login" });
+        next(err);
     }
 };
 
@@ -131,7 +189,7 @@ exports.verifyToken = (req, res) => {
     }
 };
 
-exports.forgotPassword = async (req, res) => {
+exports.forgotPassword = async (req, res, next) => {
     const { email } = req.body;
     if (!email) {
         return res.status(400).json({ message: "Email is required" });
@@ -183,11 +241,11 @@ exports.forgotPassword = async (req, res) => {
         }
     } catch (err) {
         console.error("Forgot password error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.resetPassword = async (req, res) => {
+exports.resetPassword = async (req, res, next) => {
     try {
         const { token } = req.params;
         const { password } = req.body;
@@ -223,6 +281,6 @@ exports.resetPassword = async (req, res) => {
         });
     } catch (err) {
         console.error("Reset password error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };

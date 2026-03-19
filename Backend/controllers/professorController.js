@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Assignment = require("../model/schema/assignment");
 const Activity = require("../model/schema/activity");
 
-exports.getProfessorDashboard = async (req, res) => {
+exports.getProfessorDashboard = async (req, res, next) => {
     try {
         if (req.user.role !== "professor") {
             return res.status(403).json({ message: "Access Denied" });
@@ -62,11 +62,11 @@ exports.getProfessorDashboard = async (req, res) => {
 
     } catch (err) {
         console.error("GET /professor/dashboard error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getProfessorAssignments = async (req, res) => {
+exports.getProfessorAssignments = async (req, res, next) => {
     try {
         if (req.user.role !== "professor") {
             return res.status(403).json({ message: "Access denied" });
@@ -82,11 +82,11 @@ exports.getProfessorAssignments = async (req, res) => {
 
     } catch (err) {
         console.error("GET /professor/assignments error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getAssignmentForReview = async (req, res) => {
+exports.getAssignmentForReview = async (req, res, next) => {
     try {
         if (req.user.role !== "professor") {
             return res.status(403).json({ message: "Access denied" });
@@ -119,11 +119,11 @@ exports.getAssignmentForReview = async (req, res) => {
 
     } catch (err) {
         console.error("Review fetch error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.approveAssignment = async (req, res) => {
+exports.approveAssignment = async (req, res, next) => {
     try {
         if (req.user.role !== "professor") {
             return res.status(403).json({ message: "Access denied" });
@@ -166,11 +166,11 @@ exports.approveAssignment = async (req, res) => {
 
     } catch (err) {
         console.error("Approve assignment error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.rejectAssignment = async (req, res) => {
+exports.rejectAssignment = async (req, res, next) => {
     try {
         if (req.user.role !== "professor") {
             return res.status(403).json({ message: "Access denied" });
@@ -223,6 +223,6 @@ exports.rejectAssignment = async (req, res) => {
 
     } catch (err) {
         console.error("Reject assignment error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };

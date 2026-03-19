@@ -1,20 +1,43 @@
+function handleCastErrorDB(err) {
+    return new AppError(`Invalid ${err.path}: ${err.value}`, 400);
+}
+
+function handleDuplicateFieldsDB(err) {
+    const value = Object.values(err.keyValue || {})[0] || (err.errmsg && err.errmsg.match(/(["'])(\\?.)*?\1/)?.[0]);
+    return new AppError(`Duplicate field value: ${value}. Please use another value.`, 400);
+}
+
+function handleValidationErrorDB(err) {
+    const errors = Object.values(err.errors).map(el => el.message);
+    const message = `Invalid input data. ${errors.join('. ')}`;
+    return new AppError(message, 400);
+}
+
 module.exports = (err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
-    const status = err.status || 'error';
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'development') {
-        res.status(statusCode).json({
-            status: status,
+        res.status(err.statusCode).json({
+            status: err.status,
+            error: err,
             message: err.message,
-            stack: err.stack,
-            error: err
+            stack: err.stack
         });
     } else {
-        // Production: Don't leak stack traces
-        if (err.isOperational) {
-            res.status(statusCode).json({
-                status: status,
-                message: err.message
+        // Production: structured error with minimal leakage
+        let error = { ...err };
+        error.message = err.message;
+        error.name = err.name;
+
+        if (error.name === 'CastError') error = handleCastErrorDB(error);
+        if (error.code === 11000) error = handleDuplicateFieldsDB(error);
+        if (error.name === 'ValidationError') error = handleValidationErrorDB(error);
+
+        if (error.isOperational) {
+            res.status(error.statusCode).json({
+                status: error.status,
+                message: error.message
             });
         } else {
             console.error('ERROR 💥', err);

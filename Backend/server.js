@@ -1,4 +1,22 @@
 require('dotenv').config();
+
+// Fail-fast environment variable validation
+const requiredEnv = [
+  'PORT', 
+  'MONGO_URI', 
+  'CLIENT_ORIGIN', 
+  'JWT_SECRET', 
+  'CLOUDINARY_CLOUD_NAME', 
+  'CLOUDINARY_API_KEY', 
+  'CLOUDINARY_API_SECRET'
+];
+
+const missingEnv = requiredEnv.filter(envVar => !process.env[envVar]);
+if (missingEnv.length > 0) {
+    console.error(`❌ FATAL ERROR: Missing required environment variables: ${missingEnv.join(', ')}`);
+    process.exit(1); // Fail immediately and prevent the server from booting in a zombie state
+}
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');

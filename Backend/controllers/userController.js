@@ -4,17 +4,18 @@ const User = require('../model/schema/user');
 const Department = require('../model/schema/department');
 const Assignment = require('../model/schema/assignment');
 const Activity = require("../model/schema/activity");
+const sendEmail = require("../utils/email");
 
-exports.getDepartmentsList = async (req, res) => {
+exports.getDepartmentsList = async (req, res, next) => {
     try {
         const departments = await Department.find().select("name code");
         res.json(departments);
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getUsers = async (req, res) => {
+exports.getUsers = async (req, res, next) => {
     try {
         let { page = 1, limit = 20, search = "", role = "all", department = "all" } = req.query;
         page = Number(page);
@@ -67,11 +68,11 @@ exports.getUsers = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ message: "Server error", error: err.message });
+        next(err);
     }
 };
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
     try {
         const { name, email, password, departmentId, role } = req.body;
         if (!name || !email || !password || !departmentId || !role) {
@@ -95,6 +96,18 @@ exports.createUser = async (req, res) => {
         });
 
         await user.save();
+
+        // Send Welcome Email with credentials
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Your UniPortal Account has been created!',
+                message: `Hello ${user.name},\n\nAn admin has created your UniPortal account.\n\nYour login credentials are:\nEmail: ${user.email}\nPassword: ${password}\n\nPlease log in and change your password as soon as possible.`
+            });
+        } catch (emailErr) {
+            console.error("Failed to send welcome email:", emailErr);
+        }
+
         await Activity.create({
             type: "user_created",
             message: `User "${user.name}" created (${user.role})`,
@@ -107,11 +120,11 @@ exports.createUser = async (req, res) => {
         res.json({ success: true, message: "User created successfully", user });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getUserById = async (req, res) => {
+exports.getUserById = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id).populate('department', 'name');
 
@@ -129,11 +142,11 @@ exports.getUserById = async (req, res) => {
             role: user.role
         });
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req, res, next) => {
     try {
         const { name, email, password, departmentId } = req.body;
 
@@ -166,11 +179,11 @@ exports.updateUser = async (req, res) => {
         res.json({ success: true, message: "User updated successfully" });
 
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     try {
         const userId = req.params.id;
 
@@ -207,6 +220,6 @@ exports.deleteUser = async (req, res) => {
 
     } catch (err) {
         console.log("Delete Error:", err);
-        return res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };

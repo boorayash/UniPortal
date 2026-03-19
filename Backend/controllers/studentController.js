@@ -3,7 +3,7 @@ const Assignment = require("../model/schema/assignment");
 const User = require("../model/schema/user");
 const Activity = require("../model/schema/activity");
 
-exports.getStudentDashboard = async (req, res) => {
+exports.getStudentDashboard = async (req, res, next) => {
     try {
         const studentId = req.user.id;
 
@@ -42,11 +42,11 @@ exports.getStudentDashboard = async (req, res) => {
 
     } catch (err) {
         console.error("GET /student/dashboard error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getStudentAssignments = async (req, res) => {
+exports.getStudentAssignments = async (req, res, next) => {
     try {
         const { status, sort } = req.query;
 
@@ -66,11 +66,11 @@ exports.getStudentAssignments = async (req, res) => {
         res.json(assignments);
     } catch (err) {
         console.error("GET /student/assignments error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.uploadAssignment = async (req, res) => {
+exports.uploadAssignment = async (req, res, next) => {
     try {
         const { title, description, category } = req.body;
 
@@ -114,11 +114,11 @@ exports.uploadAssignment = async (req, res) => {
 
     } catch (err) {
         console.error("Upload assignment error:", err);
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.bulkUploadAssignments = async (req, res) => {
+exports.bulkUploadAssignments = async (req, res, next) => {
     try {
         const { description, category } = req.body;
 
@@ -167,11 +167,11 @@ exports.bulkUploadAssignments = async (req, res) => {
 
     } catch (err) {
         console.error("Bulk upload error:", err);
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.submitAssignment = async (req, res) => {
+exports.submitAssignment = async (req, res, next) => {
     try {
         const { reviewerId } = req.body;
 
@@ -216,11 +216,11 @@ exports.submitAssignment = async (req, res) => {
 
     } catch (err) {
         console.error("Submit assignment error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.getProfessorsForStudent = async (req, res) => {
+exports.getProfessorsForStudent = async (req, res, next) => {
     try {
         const student = await User.findById(req.user.id);
 
@@ -232,11 +232,11 @@ exports.getProfessorsForStudent = async (req, res) => {
         res.json(professors);
     } catch (err) {
         console.error("Fetch professors error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };
 
-exports.resubmitAssignment = async (req, res) => {
+exports.resubmitAssignment = async (req, res, next) => {
     try {
         const { description } = req.body;
 
@@ -281,6 +281,6 @@ exports.resubmitAssignment = async (req, res) => {
 
     } catch (err) {
         console.error("Resubmit error:", err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
 };

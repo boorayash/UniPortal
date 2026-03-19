@@ -1,43 +1,52 @@
-const nodemailer = require('nodemailer');
-
 const sendEmail = async (options) => {
-    // 1) Create a transporter
-    // If you have set up SMTP env variables, this will use them.
-    // Otherwise, it will log to console as a fallback.
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-        const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-            port: process.env.EMAIL_PORT || 465,
-            secure: process.env.EMAIL_PORT == 465, // Use SSL for port 465
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
+    // 1) Check if Brevo API key is available
+    if (process.env.BREVO_API) {
+        const url = 'https://api.brevo.com/v3/smtp/email';
+        
+        // Use EMAIL_USER if provided, otherwise a fallback sender
+        const senderEmail = process.env.EMAIL_USER;
 
-        // 2) Define email options
-        const mailOptions = {
-            from: `UniPortal Admin <${process.env.EMAIL_USER}>`,
-            to: options.email,
+        const payload = {
+            sender: { 
+                name: 'UniPortal Admin', 
+                email: senderEmail 
+            },
+            to: [{ 
+                email: options.email 
+            }],
             subject: options.subject,
-            text: options.message,
+            textContent: options.message,
         };
 
-        // 3) Send the email
         try {
-            await transporter.sendMail(mailOptions);
-            console.log(`✅ Real email sent to: ${options.email}`);
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'api-key': process.env.BREVO_API,
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('❌ Brevo API Error:', errorData);
+                throw new Error(`Brevo Email Failed: ${response.statusText}`);
+            }
+
+            console.log(`✅ Brevo email sent successfully to: ${options.email}`);
         } catch (error) {
-            console.error('❌ Error sending real email:', error);
+            console.error('❌ Error sending email via Brevo:', error);
             throw error;
         }
     } else {
-        // FALLBACK: Useful for testing if SMTP is not configured
-        console.log('--- 📧 SIMULATED EMAIL SENT (Config missing) ---');
+        // FALLBACK: Useful for testing if Brevo API is not configured
+        console.log('--- 📧 SIMULATED EMAIL SENT (Brevo API missing) ---');
         console.log(`To: ${options.email}`);
         console.log(`Subject: ${options.subject}`);
         console.log(`Message: ${options.message}`);
-        console.log('-----------------------------------------------');
+        console.log('---------------------------------------------------');
     }
 };
 

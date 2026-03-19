@@ -1,7 +1,7 @@
 const Department = require('../model/schema/department');
 const Activity = require("../model/schema/activity");
 
-exports.getAllDepartments = async (req, res) => {
+exports.getAllDepartments = async (req, res, next) => {
     try {
         const departments = await Department.aggregate([
             {
@@ -27,11 +27,11 @@ exports.getAllDepartments = async (req, res) => {
         res.status(200).json(departments);
     } catch (err) {
         console.error("Fetch departments error:", err);
-        res.status(500).json({ message: 'Error fetching departments' });
+        next(err);
     }
 };
 
-exports.createDepartment = async (req, res) => {
+exports.createDepartment = async (req, res, next) => {
     try {
         const { name, code, type } = req.body;
 
@@ -55,11 +55,11 @@ exports.createDepartment = async (req, res) => {
 
     } catch (err) {
         console.error("Create department error:", err);
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.updateDepartment = async (req, res) => {
+exports.updateDepartment = async (req, res, next) => {
     try {
         const { name, code, type } = req.body;
 
@@ -87,11 +87,11 @@ exports.updateDepartment = async (req, res) => {
 
     } catch (err) {
         console.error("Update department error:", err);
-        res.status(400).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.deleteDepartment = async (req, res) => {
+exports.deleteDepartment = async (req, res, next) => {
     try {
         const dept = await Department.findByIdAndDelete(req.params.id);
 
@@ -113,6 +113,6 @@ exports.deleteDepartment = async (req, res) => {
 
     } catch (err) {
         console.error("Delete department error:", err);
-        res.status(500).json({ message: 'Error deleting department' });
+        next(err);
     }
 };

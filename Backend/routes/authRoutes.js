@@ -5,6 +5,7 @@ const Department = require("../model/schema/department.js");
 
 router.post("/login", authController.login);
 router.post("/signup", authController.signup);
+router.post("/verify-otp", authController.verifyOTP);
 router.post("/logout", authController.logout);
 router.post("/forgot-password", authController.forgotPassword);
 router.patch("/reset-password/:token", authController.resetPassword);
