@@ -146,7 +146,7 @@ export default function Departments() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
 
       {/* Sidebar */}
       <Reuse />

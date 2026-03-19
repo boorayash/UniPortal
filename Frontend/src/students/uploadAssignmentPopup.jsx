@@ -57,7 +57,7 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
       <div className="bg-gray-900 w-full max-w-lg rounded-2xl p-6 border border-white/10">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-4">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Upload Assignment</h2>
           <button
             onClick={onClose}

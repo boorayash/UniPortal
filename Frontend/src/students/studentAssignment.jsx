@@ -64,7 +64,7 @@ export default function StudentAssignments() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen flex flex-col md:flex-row overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
       <StudentReuse />
 
       <div className="flex-1 p-4 md:p-10 transition-opacity duration-300">

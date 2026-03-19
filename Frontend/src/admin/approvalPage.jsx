@@ -42,10 +42,10 @@ export default function ApprovalPage() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f172a] to-[#1c0033] text-white">
+        <div className="flex flex-col md:flex-row min-h-screen overflow-x-hidden bg-gradient-to-br from-[#0a0a0a] via-[#0f172a] to-[#1c0033] text-white">
             <AdminReuse />
 
-            <main className="flex-1 p-8 overflow-y-auto">
+            <main className="flex-1 p-4 md:p-8 overflow-y-auto">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-8">
                     <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl">
@@ -72,7 +72,7 @@ export default function ApprovalPage() {
                         {pendingUsers.map((user) => (
                             <div
                                 key={user._id}
-                                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 flex items-center justify-between hover:bg-white/10 transition-all duration-300"
+                                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/10 transition-all duration-300"
                             >
                                 <div className="flex-1">
                                     <h3 className="text-lg font-semibold text-white">{user.name}</h3>
@@ -87,7 +87,7 @@ export default function ApprovalPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-3 ml-4">
+                                <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full sm:w-auto">
                                     <button
                                         onClick={() => handleAction(user._id, "approve")}
                                         disabled={actionLoading === user._id}
