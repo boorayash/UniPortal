@@ -23,9 +23,8 @@ const storage = new CloudinaryStorage({
 
     return {
       folder: "uniportal",
-      resource_type: "image", // Use image for PDFs to allow browser preview & transformations
-      public_id: `${Date.now()}-${sanitizedName}`,
-      format: "pdf" // Explicitly set format to pdf
+      resource_type: "raw", // CRITICAL: Use 'raw' to avoid 401/ACL issues on this account
+      public_id: `${Date.now()}-${sanitizedName}`
     };
   }
 });

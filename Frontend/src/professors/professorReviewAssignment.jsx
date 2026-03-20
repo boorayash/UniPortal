@@ -138,12 +138,26 @@ export default function ReviewAssignment() {
 
           {/* Right */}
           <div className="lg:col-span-2">
-            <Card title="Assignment File Preview">
-              <iframe
-                src={`https://docs.google.com/gview?url=${encodeURIComponent(data.fileUrl)}&embedded=true`}
-                className="w-full h-[520px] rounded-xl border border-white/20 bg-black"
-                title="Assignment Preview"
-              />
+            <Card 
+              title="Assignment File Preview"
+              extra={
+                <a 
+                  href={data.fileUrl} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="text-emerald-400 hover:text-emerald-300 text-xs flex items-center gap-1"
+                >
+                  Open Original ↗
+                </a>
+              }
+            >
+              <div className="relative w-full h-[520px] rounded-xl overflow-hidden border border-white/20 bg-black">
+                <iframe
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(data.fileUrl)}&embedded=true&nocache=${Date.now()}`}
+                  className="w-full h-full"
+                  title="Assignment Preview"
+                />
+              </div>
             </Card>
           </div>
         </div>
@@ -172,12 +186,15 @@ export default function ReviewAssignment() {
 
 /* ---------- UI Helpers ---------- */
 
-function Card({ title, children }) {
+function Card({ title, children, extra }) {
   return (
     <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase">
-        {title}
-      </h3>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-sm font-semibold text-gray-400 uppercase">
+          {title}
+        </h3>
+        {extra}
+      </div>
       {children}
     </div>
   );
