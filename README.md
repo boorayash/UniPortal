@@ -27,6 +27,13 @@ A full-stack web application built with the **MERN stack** (MongoDB, Express.js,
 
 ---
 
+## 🚀 Deployed Links
+
+- **Frontend**: [uniportal-frontend.vercel.app](https://ur-uniportal.vercel.app)
+- **Backend API**: [uniportal-backend.onrender.com](https://uniportal-backend.onrender.com)
+
+---
+
 ## About the Project
 
 UniPortal replaces the traditional paper-based assignment submission and review process with a centralized digital platform. It supports **three distinct user roles** — Admin, Student, and Professor — each with their own dashboard, workflows, and permissions.
@@ -44,11 +51,18 @@ The system handles the entire lifecycle of an assignment:
 ## Key Features
 
 ### Authentication & Security
-- 🔐 **Secure Login** — Passwords hashed with `bcryptjs`, tokens stored in `httpOnly` cookies (not localStorage)
-- 🛡️ **Server-Verified Route Guards** — Frontend `ProtectedRoute` verifies authentication via a backend `/auth/verify` endpoint on every page load
-- ⏱️ **Rate Limiting** — Brute-force protection on the login endpoint (5 attempts per 15 min)
-- 🔑 **Password Reset** — Token-based flow with hashed tokens, 1-hour expiry, and real SMTP email delivery via Nodemailer
-- ✅ **Admin Approval Gate** — New signups must be approved by an admin before gaining access
+- 🔐 **Secure JWT Auth** — Tokens stored in `localStorage` as Bearer tokens (bypassing mobile cookie restrictions).
+- 📧 **OTP Email Verification** — New signups require a 6-digit OTP verification delivered via Brevo (Sendinblue).
+- 🛡️ **Server-Verified Route Guards** — Frontend `ProtectedRoute` verifies validity via a backend `/auth/verify` endpoint.
+- ⏱️ **Rate Limiting** — Brute-force protection on the login endpoint (5 attempts per 15 min).
+- 🔑 **Password Reset** — Token-based flow with real SMTP email delivery and 1-hour expiry.
+- ✅ **Admin Approval Gate** — New signups must be approved by an admin before gaining access.
+
+### Mobile-First Responsive UI
+- 📱 **Adaptive Sidebar** — Navigation automatically collapses into a sleek top horizontal navbar on mobile devices.
+- ↔️ **Responsive Tables** — All data tables are wrapped in horizontal scroll containers to prevent layout breakage.
+- 📐 **Dynamic Grids** — Stats and filters automatically stack vertically on small screens and expand to 4-column grids on desktop.
+- 🖋️ **Fluid Typography** — Headings and padding automatically shrink on mobile to maximize usable screen space.
 
 ### Assignment Management
 - 📤 **Single & Bulk Upload** — Upload one or multiple PDF assignments at once
@@ -83,7 +97,6 @@ The system handles the entire lifecycle of an assignment:
 | React Router v7 | Client-side routing |
 | Tailwind CSS v4 | Utility-first styling |
 | Framer Motion | Animations & transitions |
-| React Three Fiber | 3D particle backgrounds |
 | Lucide React | Icon library |
 
 ### Backend
@@ -95,9 +108,8 @@ The system handles the entire lifecycle of an assignment:
 | JWT (jsonwebtoken) | Authentication tokens |
 | bcryptjs | Password hashing |
 | Cloudinary + Multer | File upload & cloud storage |
-| Nodemailer | SMTP email delivery |
+| Brevo (Sendinblue) API | Transactional email delivery (OTP & Notifications) |
 | express-rate-limit | Brute-force protection |
-| cookie-parser | httpOnly cookie handling |
 
 ---
 
@@ -114,11 +126,11 @@ The system handles the entire lifecycle of an assignment:
 │       │              │              │                     │
 │       └──────────────┼──────────────┘                     │
 │                      │                                    │
-│              ProtectedRoute (cookie-verified)             │
+│              ProtectedRoute (Token Verified)              │
 │                      │                                    │
 │              config/api.js (VITE_API_URL)                 │
 └──────────────────────┼────────────────────────────────────┘
-                       │ HTTPS (credentials: include)
+                       │ HTTPS (Authorization: Bearer <token>)
 ┌──────────────────────┼────────────────────────────────────┐
 │                  Backend (Express 5)                       │
 │                      │                                    │
@@ -140,8 +152,8 @@ The system handles the entire lifecycle of an assignment:
 │  └───────────────────────────────────────────────┘        │
 │                                                          │
 │  ┌────────────────┐  ┌──────────────┐                    │
-│  │   Cloudinary   │  │  Nodemailer  │                    │
-│  │  (File Storage)│  │ (SMTP Email) │                    │
+│  │   Cloudinary   │  │    Brevo     │                    │
+│  │  (File Storage)│  │ (Email API)  │                    │
 │  └────────────────┘  └──────────────┘                    │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -181,29 +193,22 @@ npm install
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/uniportal
 JWT_SECRET=your-secret-key-here
-CLIENT_ORIGIN=http://localhost:5173
-NODE_ENV=development
+CLIENT_ORIGIN=https://your-frontend-link.vercel.app
+NODE_ENV=production
 
-# Admin seed account
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin123
+# Email (Brevo API)
+BREVO_API_KEY=xkeys-xxx...
 
 # Cloudinary (File Uploads)
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
-
-# Email (Password Reset)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=465
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-16-char-app-password
 ```
 
 #### Frontend (`Frontend/.env`)
 
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=https://your-backend-link.onrender.com
 ```
 
 ### Running Locally
