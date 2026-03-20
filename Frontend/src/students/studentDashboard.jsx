@@ -80,7 +80,7 @@ export default function StudentDashboard() {
 
                 <button
                   onClick={() => setShowUpload(true)}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-xl text-sm font-medium"
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-bold rounded-xl text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
                 >
                   Upload New Assignment
                 </button>

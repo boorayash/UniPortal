@@ -113,14 +113,14 @@ export default function StudentAssignments() {
 
                 <button
                   onClick={() => setShowUpload(true)}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-medium transition"
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
                 >
                   Upload
                 </button>
 
                 <button
                   onClick={() => setShowBulk(true)}
-                  className="px-5 py-2.5 bg-purple-600/90 hover:bg-purple-700 rounded-xl font-medium transition"
+                  className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-fuchsia-600 hover:from-purple-400 hover:to-fuchsia-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
                 >
                   Bulk Upload
                 </button>
@@ -171,7 +171,7 @@ export default function StudentAssignments() {
                                   e.stopPropagation();
                                   setSubmitId(a._id);
                                 }}
-                                className="px-3 py-1 bg-emerald-600/20 text-emerald-300 rounded text-xs hover:bg-emerald-600/30"
+                                className="px-3 py-1 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-bold rounded-full text-[10px] shadow-md shadow-emerald-500/20 transition-all hover:scale-110 active:scale-95"
                               >
                                 Submit for Review
                               </button>

@@ -152,14 +152,14 @@ export default function ReviewAssignment() {
         <div className="mt-8 flex gap-4">
           <button
             onClick={approve}
-            className="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-semibold"
+            className="px-8 py-3 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-bold rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
           >
             ✓ Approve Assignment
           </button>
 
           <button
             onClick={reject}
-            className="px-8 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold"
+            className="px-8 py-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-400 hover:to-rose-500 text-white rounded-xl font-semibold shadow-lg shadow-red-500/25 hover:shadow-red-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
           >
             ✕ Reject Assignment
           </button>

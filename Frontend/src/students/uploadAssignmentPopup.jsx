@@ -58,7 +58,7 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
 
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Upload Assignment</h2>
+          <h2 className="text-xl font-bold text-white">Upload Assignment</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white"
@@ -73,46 +73,49 @@ export default function UploadAssignmentPopup({ onClose, onSuccess }) {
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-3 rounded bg-white/10"
+            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <textarea
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-3 rounded bg-white/10"
+            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-3 rounded bg-white/10"
+            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="assignment">Assignment</option>
-            <option value="thesis">Thesis</option>
-            <option value="report">Report</option>
+            <option value="assignment" className="bg-gray-900">Assignment</option>
+            <option value="thesis" className="bg-gray-900">Thesis</option>
+            <option value="report" className="bg-gray-900">Report</option>
           </select>
 
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="text-sm"
-          />
+          <div className="p-4 border-2 border-dashed border-white/20 rounded-xl bg-white/5 flex flex-col items-center">
+             <input
+               type="file"
+               accept="application/pdf"
+               onChange={(e) => setFile(e.target.files[0])}
+               className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600/20 file:text-blue-200 hover:file:bg-blue-600/30"
+             />
+             <p className="mt-2 text-xs text-gray-500">PDF files only, max 10MB</p>
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl transition ${loading
-                ? "bg-blue-600/50 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
+            className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${loading
+                ? "bg-blue-600/30 text-white/50 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95"
               }`}
           >
-            {loading ? "Uploading..." : "Upload"}
+            {loading ? "Uploading..." : "Upload Assignment"}
           </button>
 
           {message && (
-            <p className="text-sm text-green-400 text-center">
+            <p className={`text-sm text-center font-medium ${message.includes("success") ? "text-green-400" : "text-red-400"}`}>
               {message}
             </p>
           )}

@@ -101,7 +101,7 @@ export default function ProfessorDashboard() {
                             window.location.href =
                             `/professor/assignments/${a._id}/review`
                           }
-                          className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-lg text-sm"
+                          className="px-4 py-1.5 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-black font-bold rounded-lg text-sm shadow-[0_0_15px_rgba(52,211,153,0.2)] hover:shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
                         >
                           Review
                         </button>
