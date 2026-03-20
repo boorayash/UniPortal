@@ -56,7 +56,7 @@ export default function StudentDashboard() {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
               <h1 className="text-3xl font-bold">
-                Assignment Dashboard
+                Student Dashboard
               </h1>
               <AuthUserBadge />
             </div>
