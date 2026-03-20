@@ -23,8 +23,9 @@ const storage = new CloudinaryStorage({
 
     return {
       folder: "uniportal",
-      resource_type: "raw", // CRITICAL: Force raw to avoid 401/ACL issues
-      public_id: `${Date.now()}-${sanitizedName}`
+      resource_type: "image", // Use image for PDFs to allow browser preview & transformations
+      public_id: `${Date.now()}-${sanitizedName}`,
+      format: "pdf" // Explicitly set format to pdf
     };
   }
 });

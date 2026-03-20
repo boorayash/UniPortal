@@ -166,8 +166,8 @@ The system handles the entire lifecycle of an assignment:
 
 - **Node.js** v18 or higher
 - **MongoDB** (local instance or [MongoDB Atlas](https://www.mongodb.com/atlas))
-- **Cloudinary** account ([free tier](https://cloudinary.com/))
-- **Gmail account** with [App Password](https://myaccount.google.com/apppasswords) for SMTP (optional)
+- **Brevo account** (for transactional emails/OTP)
+- **Cloudinary account** ([free tier](https://cloudinary.com/))
 
 ### Installation
 
@@ -267,7 +267,8 @@ Open your browser and navigate to `http://localhost:5173`.
 | POST | `/auth/login` | Log in with email and password |
 | POST | `/auth/signup` | Register a new user account |
 | POST | `/auth/logout` | Clear auth cookie and log out |
-| GET | `/auth/verify` | Verify session via httpOnly cookie |
+| GET | `/auth/verify` | Verify token validity and return user details |
+| POST | `/auth/verify-otp` | Verify 6-digit email OTP during signup |
 | POST | `/auth/forgot-password` | Request a password reset email |
 | PATCH | `/auth/reset-password/:token` | Reset password using the emailed token |
 | GET | `/auth/departments` | Get department list for signup dropdown |
@@ -382,8 +383,9 @@ UniPortal/
 | Layer | Implementation |
 |---|---|
 | **Password Storage** | Hashed with `bcryptjs` (10 salt rounds) — plain-text passwords never stored |
-| **Authentication** | JWT tokens stored in `httpOnly`, `secure`, `sameSite` cookies — immune to XSS |
-| **Route Protection** | Frontend `ProtectedRoute` calls `/auth/verify` on every page load — server verifies the cookie, not localStorage |
+| **Authentication** | JWT tokens stored in `localStorage`, sent via `Authorization: Bearer` headers |
+| **Route Protection** | Frontend `ProtectedRoute` calls `/auth/verify` with Bearer token on every page load |
+| **Trust Proxy** | `app.set('trust proxy', 1)` enabled for accurate rate limiting on Render |
 | **Authorization** | Backend middleware checks `req.user.role` before granting access to any endpoint |
 | **Brute-Force** | `express-rate-limit` on `/auth/login` — 5 attempts per 15 minutes per IP |
 | **File Uploads** | PDF-only filter, 10MB size limit, Cloudinary `raw` resource type, sanitized public IDs |

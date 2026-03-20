@@ -12,7 +12,7 @@ export default function ReviewAssignment() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [id]);
 
   const fetchData = async () => {
     const res = await fetch(
@@ -82,9 +82,6 @@ export default function ReviewAssignment() {
 
   if (!data) return <p className="text-white p-4 md:p-10">Loading...</p>;
 
-  /* ✅ FIX: derive filename correctly */
-  // const filename = data.filePath.split("/").pop();
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
       <ProfessorReuse />
@@ -143,7 +140,7 @@ export default function ReviewAssignment() {
           <div className="lg:col-span-2">
             <Card title="Assignment File Preview">
               <iframe
-                src={data.fileUrl}
+                src={`https://docs.google.com/gview?url=${encodeURIComponent(data.fileUrl)}&embedded=true`}
                 className="w-full h-[520px] rounded-xl border border-white/20 bg-black"
                 title="Assignment Preview"
               />
@@ -200,4 +197,3 @@ function Info({ label, value, badge }) {
     </div>
   );
 }
-
