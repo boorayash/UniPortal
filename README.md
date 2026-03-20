@@ -51,12 +51,12 @@ The system handles the entire lifecycle of an assignment:
 ## Key Features
 
 ### Authentication & Security
-- 🔐 **Secure JWT Auth** — Tokens stored in `localStorage` as Bearer tokens (bypassing mobile cookie restrictions).
-- 📧 **OTP Email Verification** — New signups require a 6-digit OTP verification delivered via Brevo (Sendinblue).
-- 🛡️ **Server-Verified Route Guards** — Frontend `ProtectedRoute` verifies validity via a backend `/auth/verify` endpoint.
-- ⏱️ **Rate Limiting** — Brute-force protection on the login endpoint (5 attempts per 15 min).
-- 🔑 **Password Reset** — Token-based flow with real SMTP email delivery and 1-hour expiry.
-- ✅ **Admin Approval Gate** — New signups must be approved by an admin before gaining access.
+- 🔐 **Dual-Strategy JWT Auth** — Tokens are served via `httpOnly`, `secure`, `sameSite` cookies for standard browser security, while also providing `Bearer` tokens for mobile/PWA compatibility.
+- 📧 **OTP Email Verification** — Mandatory 6-digit OTP verification for all new signups, delivered via Brevo (Sendinblue) API.
+- 🛡️ **Server-Verified Route Guards** — Frontend `ProtectedRoute` validates sessions via the backend `/auth/verify` endpoint on every mount.
+- ⏱️ **Rate Limiting** — Brute-force protection on the `/auth/login` endpoint (5 attempts per 15 min).
+- 🔑 **Password Reset** — Secure token-based flow with real SMTP delivery and 1-hour expiry.
+- ✅ **Admin Approval Gate** — New accounts are locked by default and must be manually approved by an admin.
 
 ### Mobile-First Responsive UI
 - 📱 **Adaptive Sidebar** — Navigation automatically collapses into a sleek top horizontal navbar on mobile devices.
@@ -65,12 +65,12 @@ The system handles the entire lifecycle of an assignment:
 - 🖋️ **Fluid Typography** — Headings and padding automatically shrink on mobile to maximize usable screen space.
 
 ### Assignment Management
-- 📤 **Single & Bulk Upload** — Upload one or multiple PDF assignments at once
-- ☁️ **Cloud Storage** — All files stored on Cloudinary with `raw` resource type for secure PDF serving
-- 👀 **Inline Preview** — Professors can preview submitted PDFs directly in the browser via iframe
-- 📝 **Review History** — Full audit trail of every approval, rejection, and resubmission with timestamps
-- 🔄 **Resubmission Flow** — Rejected assignments can be edited and resubmitted to a new professor
-- ✍️ **Digital Signatures** — Professors sign approvals with their name, recorded in the review history
+- 📤 **Single & Bulk Upload** — Seamlessly upload individual assignments or batch-process up to 5 PDFs at once.
+- ☁️ **Cloud Storage** — Reliable file hosting on Cloudinary using `raw` resource types to ensure binary integrity.
+- 👀 **Premium Native Preview** — Professors review assignments via a high-performance native browser viewer with an "Open Original" fallback link.
+- 📝 **Review History** — Full audit trail of every submission, approval, rejection, and remark with precise timestamps.
+- 🔄 **Resubmission Workflow** — Rejected assignments can be revised and resubmitted, allowing for an iterative feedback loop.
+- ✍️ **Digital Signatures** — Formal approval recorded with a professor's digital signature for record-keeping.
 
 ### Admin Panel
 - 📊 **Dashboard** — Real-time stats for departments, students, professors, and HODs
@@ -80,10 +80,10 @@ The system handles the entire lifecycle of an assignment:
 - ✅ **Approval Queue** — Approve or reject pending user registrations
 
 ### UI/UX
-- 🎨 **Premium Glassmorphism UI** — Dark theme with frosted glass effects and gradient accents
-- 🎭 **3D Tilt Cards** — Interactive login/auth cards with mouse-tracking tilt animation via Framer Motion
-- ✨ **Particle Background** — Animated 3D particle field on the login page using React Three Fiber
-- ⏳ **Loading States** — All upload/submit buttons show progress indicators to prevent double submissions
+- 🎨 **Premium Aesthetic** — Minimalist dark theme featuring high-vibrancy gradients (`emerald-cyan`, `purple-fuchsia`), frosted glass effects, and glowing accents.
+- 🎭 **Interactive 3D Components** — Login and signup cards feature 3D tilt-on-hover animations using Framer Motion and mouse-tracking.
+- ✨ **Animated Environments** — immersive 3D particle fields and background blobs for a modern, fluid feel.
+- ⏳ **Smart UI Feedback** — Real-time loading states and optimistic UI updates for a snappy experience.
 
 ---
 
@@ -321,20 +321,22 @@ Open your browser and navigate to `http://localhost:5173`.
 │ name         │◄────│ assignedTo (ref)  │     │ name         │
 │ email        │     │ reviewer (ref)    │     │ code         │
 │ password     │     │ givenBy (ref)     │     │ type (UG/PG) │
-│ department   │────►│ department (ref)  │◄────│ createdAt    │
-│ role         │     │ title             │     └──────────────┘
+│ role         │     │ department (ref)  │◄────│ createdAt    │
+│ department   │────►│ title             │     └──────────────┘
 │ approved     │     │ description       │
-│ resetToken   │     │ category          │     ┌──────────────┐
-│ resetExpires │     │ filePath          │     │   Activity   │
-└──────────────┘     │ fileSize          │     ├──────────────┤
-                     │ status            │     │ type         │
-┌──────────────┐     │ reviewHistory[]   │     │ message      │
-│    Admin     │     │ submittedAt       │     │ actor (ref)  │
-├──────────────┤     │ resubmittedAt     │     │ meta {}      │
-│ email        │     │ remarks           │     │ timestamps   │
-│ password     │     │ approvedBy (ref)  │     └──────────────┘
-└──────────────┘     │ timestamps        │
-                     └───────────────────┘
+│isEmailVerified│    │ category          │     ┌──────────────┐
+│ otp          │     │ filePath          │     │   Activity   │
+│ otpExpires   │     │ fileSize          │     ├──────────────┤
+│ resetToken   │     │ status            │     │ type         │
+│ resetExpires │     │ reviewHistory[]   │     │ message      │
+└──────────────┘     │ submittedAt       │     │ actor (ref)  │
+                     │ resubmittedAt     │     │ meta {}      │
+┌──────────────┐     │ remarks           │     │ timestamps   │
+│    Admin     │     │ approvedBy (ref)  │     └──────────────┘
+├──────────────┤     │ timestamps        │
+│ email        │     └───────────────────┘
+│ password     │
+└──────────────┘
 ```
 
 **Assignment Status Flow:**
@@ -383,8 +385,8 @@ UniPortal/
 | Layer | Implementation |
 |---|---|
 | **Password Storage** | Hashed with `bcryptjs` (10 salt rounds) — plain-text passwords never stored |
-| **Authentication** | JWT tokens stored in `localStorage`, sent via `Authorization: Bearer` headers |
-| **Route Protection** | Frontend `ProtectedRoute` calls `/auth/verify` with Bearer token on every page load |
+| **Authentication** | Dual implementation: `httpOnly` cookies (XSS-immune) + `Bearer` tokens (Mobile/PWA support) |
+| **Route Protection** | Frontend `ProtectedRoute` calls `/auth/verify` with valid token on every page load |
 | **Trust Proxy** | `app.set('trust proxy', 1)` enabled for accurate rate limiting on Render |
 | **Authorization** | Backend middleware checks `req.user.role` before granting access to any endpoint |
 | **Brute-Force** | `express-rate-limit` on `/auth/login` — 5 attempts per 15 minutes per IP |
