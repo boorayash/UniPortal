@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Lock, Loader2, ArrowRight, User, Key } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import API_URL from '../config/api';
+import logo from '../assets/logo/logo.png';
 
 // --- 3D TILT CARD (FIXED) ---
 function TiltCard({ children }) {
@@ -120,9 +121,9 @@ export default function Login() {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-3xl mb-6 shadow-lg shadow-purple-500/30"
+              className="inline-flex items-center justify-center mb-6"
             >
-              <Lock className="w-10 h-10 text-white" />
+              <img src={logo} alt="UniPortal Logo" className="w-40 h-40 object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]" />
             </motion.div>
             <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">Welcome to UniPortal</h1>
             <p className="text-slate-400 mt-2 font-medium">Enter your credentials to continue</p>

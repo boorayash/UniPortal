@@ -1,15 +1,19 @@
 import { NavLink } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
+import logo from "../assets/logo/logo.png";
 
 export default function AdminReuse() {
   return (
     <aside className="w-full md:w-64 h-auto md:h-screen z-50 relative bg-white/10 backdrop-blur-xl border-b md:border-b-0 md:border-r border-white/10 flex flex-col shrink-0">
 
-      {/* Title + Nav */}
-      <div className="p-4 md:p-6">
-        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-8 text-white shrink-0">
-          Admin Panel
-        </h2>
+      {/* Brand & Title */}
+      <div className="p-4 md:p-6 flex flex-col items-center md:items-start tracking-tight">
+        <div className="flex items-center gap-4 mb-6">
+          <img src={logo} alt="UniPortal Logo" className="w-20 h-20 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] shrink-0" />
+          <h2 className="text-xl md:text-2xl font-bold text-white leading-tight">
+            UniPortal
+          </h2>
+        </div>
 
         <nav className="flex flex-row md:flex-col gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 no-scrollbar snap-x">
           <NavItem to="/admin/dashboard" label="Dashboard" />

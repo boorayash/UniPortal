@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Lock, Mail, ArrowRight, ChevronDown } from 'lucide-react';
 import API_URL from '../config/api';
+import logo from '../assets/logo/logo.png';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -105,13 +106,12 @@ export default function Signup() {
       {/* Card */}
       <div className={`relative bg-white/10 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 w-full max-w-md transition-all duration-500 ${showOTP ? 'blur-md scale-95 opacity-50 pointer-events-none' : 'hover:scale-[1.02]'}`}>
 
-        {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block p-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-4 transition-transform duration-300 hover:rotate-6">
-            <User className="w-10 h-10 text-white" />
+          <div className="inline-block mb-4 transition-transform duration-300 hover:rotate-6">
+            <img src={logo} alt="UniPortal Logo" className="w-32 h-32 object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]" />
           </div>
 
-          <h1 className="text-2xl md:text-4xl font-bold text-white tracking-tight">Create Account</h1>
+          <h1 className="text-2xl md:text-text-4xl font-bold text-white tracking-tight">Create Account</h1>
           <p className="text-white/70 mt-1">Join UniPortal today</p>
         </div>
 
