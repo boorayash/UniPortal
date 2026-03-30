@@ -3,6 +3,8 @@ import Reuse from "./reuse";
 import AuthUserBadge from "../components/AuthUserBadge";
 import AdminStatCard from "./statsCard";
 import AdminActivityPanel from "./activityPanel";
+import AdminBackground from "./adminBackground";
+import { Folder, Users, Star, AlertCircle } from "lucide-react";
 import API_URL from '../config/api';
 
 export default function AdminDashboard() {
@@ -47,47 +49,61 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="h-screen flex flex-col md:flex-row overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
-
-      {/* Sidebar (FIXED) */}
+    <div className="h-screen flex flex-col md:flex-row overflow-hidden bg-[#070b14] text-gray-200">
+      
+      {/* Sidebar */}
       <Reuse />
 
       {/* Dashboard Scroll Area */}
       <div className="relative flex-1 overflow-y-auto p-4 md:p-10">
 
-        {/* Background Blobs */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-[130px] animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-[130px] animate-pulse delay-200" />
-          <div className="absolute top-40 right-40 w-80 h-80 bg-pink-500/20 rounded-full blur-[130px] animate-pulse delay-500" />
-        </div>
+        <AdminBackground />
 
-        {/* Header */}
-        <div className="relative flex justify-between items-center mb-10">
-          <h1 className="text-2xl md:text-4xl font-bold drop-shadow-lg">
-            Admin Dashboard
-          </h1>
-          <AuthUserBadge />
-        </div>
-
-        {/* Stats */}
-        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <AdminStatCard title="Total Departments" value={stats.departments} color="indigo" to="/admin/departments" />
-          <AdminStatCard title="Total Students" value={stats.students} color="green" to="/admin/users?role=student" />
-          <AdminStatCard title="Total Professors" value={stats.professors} color="orange" to="/admin/users?role=professor" />
-          <AdminStatCard title="Pending Approvals" value={stats.pendingApprovals} color="amber" to="/admin/approvals" />
-        </div>
-
-        {/* Activity */}
-        <div className="relative mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <AdminActivityPanel activity={activity} />
+        <div className="relative z-10 max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="relative flex justify-between items-center mb-10">
+            <h1 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
+              Admin Dashboard
+            </h1>
+            <AuthUserBadge />
           </div>
 
-          <div className="bg-white/10 rounded-2xl p-6">
-            <p className="text-gray-400 text-sm">
-              Coming soon…
-            </p>
+          {/* Stats: Hero Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <AdminStatCard 
+              title="Total Departments" 
+              value={stats.departments} 
+              color="indigo" 
+              to="/admin/departments" 
+              icon={Folder} 
+            />
+            <AdminStatCard 
+              title="Total Students" 
+              value={stats.students} 
+              color="cyan" 
+              to="/admin/users?role=student" 
+              icon={Users} 
+            />
+            <AdminStatCard 
+              title="Total Professors" 
+              value={stats.professors} 
+              color="indigo" 
+              to="/admin/users?role=professor" 
+              icon={Star} 
+            />
+            <AdminStatCard 
+              title="Pending Approvals" 
+              value={stats.pendingApprovals} 
+              color="amber" 
+              to="/admin/approvals" 
+              icon={AlertCircle} 
+              isWarning={true}
+            />
+          </div>
+
+          {/* Activity: Full Width System Console */}
+          <div className="w-full">
+            <AdminActivityPanel activity={activity} />
           </div>
         </div>
 

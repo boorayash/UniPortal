@@ -42,30 +42,30 @@ function NavItem({ to, label }) {
       {({ isActive }) => (
         <div
           className={`
-            relative overflow-hidden px-4 py-3 rounded-xl
-            transition-all duration-300
+            relative overflow-hidden px-4 py-3 rounded-xl border
+            transition-all duration-300 ease-out
             ${isActive
-              ? "bg-white/20 text-white scale-[1.02]"
-              : "text-gray-300 hover:bg-white/10 hover:text-white"
+              ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-300 scale-[1.02] shadow-[inset_0_0_20px_rgba(99,102,241,0.1)]"
+              : "border-transparent text-gray-400 hover:bg-white/[0.04] hover:text-gray-200"
             }
           `}
         >
-          {/* Active indicator */}
+          {/* Active left border indicator */}
           <span
             className={`
-              absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r
-              transition-transform duration-300
+              absolute left-0 top-0 h-full w-1 bg-indigo-500 rounded-r
+              transition-transform duration-300 ease-out
               ${isActive ? "scale-y-100" : "scale-y-0"}
             `}
             style={{ transformOrigin: "top" }}
           />
 
-          {/* Glow */}
+          {/* Stronger Glow underlay */}
           {isActive && (
-            <span className="absolute inset-0 bg-blue-500/10 blur-xl animate-fadeIn" />
+            <span className="absolute inset-0 bg-indigo-500/10 blur-xl pointer-events-none" />
           )}
 
-          <span className="relative z-10 font-medium">
+          <span className="relative z-10 font-medium tracking-wide">
             {label}
           </span>
         </div>
